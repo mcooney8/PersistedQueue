@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
-namespace PersistedQueue
+namespace PersistedQueue.Persistence
 {
     public class FlatFilePersistence<T> : IPersistence<T>
     {

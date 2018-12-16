@@ -11,4 +11,8 @@
   <ItemGroup>
     <Compile Remove="Program.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Queue\" />
+    <Folder Include="Persistence\" />
+  </ItemGroup>
 </Project>

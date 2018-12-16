@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PersistedQueue
+namespace PersistedQueue.Persistence
 {
     public class InMemoryPersistence<T> : IPersistence<T>
     {

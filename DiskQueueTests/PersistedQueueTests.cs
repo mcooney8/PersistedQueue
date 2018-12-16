@@ -1,5 +1,6 @@
 using System;
 using PersistedQueue;
+using PersistedQueue.Persistence;
 using Xunit;
 
 namespace PersistedQueueTests

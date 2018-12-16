@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using BenchmarkDotNet.Attributes;
 using PersistedQueue;
+using PersistedQueue.Persistence;
 
 namespace PersistedQueueBenchmarks
 {

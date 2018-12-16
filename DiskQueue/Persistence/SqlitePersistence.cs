@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PersistedQueue
+namespace PersistedQueue.Persistence
 {
     public class SqlitePersistence<T> : IPersistence<T>
     {
