@@ -8,7 +8,7 @@ Intel Core i7-4870HQ CPU 2.50GHz (Haswell), 1 CPU, 8 logical and 4 physical core
 
 
 ```
-|                 Method | itemsToEnqueue | itemsToKeepInMemory |       Mean |    Error |   StdDev | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|----------------------- |--------------- |-------------------- |-----------:|---------:|---------:|------------:|------------:|------------:|--------------------:|
-|       DiskQueueEnqueue |         100000 |                1000 | 7,726.4 us | 95.59 us | 89.41 us |   1265.6250 |   1226.5625 |   1210.9375 |            10.06 MB |
-| NormalQueueDiskEnqueue |         100000 |                1000 |   711.4 us | 13.11 us | 11.62 us |    285.1563 |    285.1563 |    285.1563 |                1 MB |
+|                 Method | itemsToEnqueue | itemsToKeepInMemory |       Mean |     Error |    StdDev | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
+|----------------------- |--------------- |-------------------- |-----------:|----------:|----------:|------------:|------------:|------------:|--------------------:|
+|       DiskQueueEnqueue |          10000 |                  10 | 1,440.5 ms | 100.95 ms | 294.47 ms |  18000.0000 |   1000.0000 |           - |           111.68 MB |
+| NormalQueueDiskEnqueue |          10000 |                  10 |   588.1 ms |  11.08 ms |  20.53 ms |  14000.0000 |   6000.0000 |   2000.0000 |            72.97 MB |

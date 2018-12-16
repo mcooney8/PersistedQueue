@@ -12,10 +12,10 @@ namespace PersistedQueue
         private readonly int maxItemsInMemory;
         private readonly object queueLock = new object();
 
-        private int nextKey;
+        private uint nextKey;
         private FixedArrayStack<T> loadedItems;
-        private FixedArrayStack<long> loadedItemsKeys; // TODO: There has to be a better way to do this
-        private ArrayStack<long> notLoadedKeys = new ArrayStack<long>();
+        private FixedArrayStack<uint> loadedItemsKeys; // TODO: There has to be a better way to do this
+        private ArrayStack<uint> notLoadedKeys = new ArrayStack<uint>();
 
         // Default persistence is Sqlite
         public PersistedQueue(string filename, int maxItemsInMemory)
@@ -31,7 +31,7 @@ namespace PersistedQueue
             }
             this.maxItemsInMemory = maxItemsInMemory;
             this.loadedItems = new FixedArrayStack<T>(maxItemsInMemory);
-            this.loadedItemsKeys = new FixedArrayStack<long>(maxItemsInMemory);
+            this.loadedItemsKeys = new FixedArrayStack<uint>(maxItemsInMemory);
             this.persistence = persistence;
         }
 
@@ -68,7 +68,7 @@ namespace PersistedQueue
                 persistence.Remove(loadedItemsKeys.Pop());
                 if (notLoadedKeys.Count > 0)
                 {
-                    long keyToLoad = notLoadedKeys.Pop();
+                    uint keyToLoad = notLoadedKeys.Pop();
                     T newlyLoadedItem = persistence.Load(keyToLoad);
                     loadedItems.Push(newlyLoadedItem);
                     loadedItemsKeys.Push(keyToLoad);
@@ -118,7 +118,7 @@ namespace PersistedQueue
             {
                 yield return item;
             }
-            foreach (long key in notLoadedKeys)
+            foreach (uint key in notLoadedKeys)
             {
                 yield return persistence.Load(key);
             }

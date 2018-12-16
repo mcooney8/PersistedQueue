@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PersistedQueue.Persistence
 {
-    public class FlatFilePersistence<T> : IPersistence<T>
+    public class FlatFilePersistence<T> : IPersistence<T>, IDisposable
     {
         private const string IndexFilename = "index";
         private const char IndexFileEntrySeparator = '\n';
@@ -18,6 +18,8 @@ namespace PersistedQueue.Persistence
         private readonly BinaryFormatter binaryFormatter;
         private readonly object indexFileLock = new object();
         private readonly object itemFileLock = new object();
+
+        private bool isDisposed;
 
         // TODO: In-memory dictionary to store partial or full index
 
@@ -42,7 +44,7 @@ namespace PersistedQueue.Persistence
             throw new NotImplementedException();
         }
 
-        public T Load(long key)
+        public T Load(uint key)
         {
             ByteRange byteRange = GetItemByteRange(key);
             byte[] buffer = new byte[byteRange.Length];
@@ -54,7 +56,7 @@ namespace PersistedQueue.Persistence
             return (T)binaryFormatter.Deserialize(new MemoryStream(buffer));
         }
 
-        public void Persist(long key, T item)
+        public void Persist(uint key, T item)
         {
             long originalFileLength;
             long serializedItemlength;
@@ -71,7 +73,7 @@ namespace PersistedQueue.Persistence
         // TODO: This whole method needs to be rethought
         // - How to efficiently remove from index file
         // - How to efficiently remove from item file
-        public void Remove(long key)
+        public void Remove(uint key)
         {
             ByteRange indexByteRange = GetIndexByteRange(key);
             lock (indexFileLock)
@@ -82,7 +84,7 @@ namespace PersistedQueue.Persistence
             }
         }
 
-        private void WriteIndex(long key, long position, long length)
+        private void WriteIndex(uint key, long position, long length)
         {
             ReadOnlySpan<byte> entryToWrite = CreateEntry(key, position, length);
             lock (indexFileLock)
@@ -95,7 +97,7 @@ namespace PersistedQueue.Persistence
             }
         }
 
-        private ReadOnlySpan<byte> CreateEntry(long key, long position, long length)
+        private ReadOnlySpan<byte> CreateEntry(uint key, long position, long length)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(key);
@@ -107,7 +109,7 @@ namespace PersistedQueue.Persistence
             return Encoding.ASCII.GetBytes(sb.ToString()).AsSpan();
         }
 
-        private ByteRange GetItemByteRange(long key)
+        private ByteRange GetItemByteRange(uint key)
         {
             long start = -1;
             int length = -1;
@@ -133,7 +135,7 @@ namespace PersistedQueue.Persistence
             }
         }
 
-        private ByteRange GetIndexByteRange(long key)
+        private ByteRange GetIndexByteRange(uint key)
         {
             lock (indexFileLock)
             {
@@ -154,6 +156,16 @@ namespace PersistedQueue.Persistence
             return default(ByteRange);
         }
 
+        public void Dispose()
+        {
+            if (!isDisposed)
+            {
+                isDisposed = true;
+                indexFileStream.Dispose();
+                itemFileStream.Dispose();
+            }
+        }
+
         private struct ByteRange
         {
             public ByteRange(long start, int length)
@@ -167,8 +179,7 @@ namespace PersistedQueue.Persistence
 
         ~FlatFilePersistence()
         {
-            indexFileStream.Dispose();
-            itemFileStream.Dispose();
+            Dispose();
         }
     }
 }

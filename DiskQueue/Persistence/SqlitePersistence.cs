@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PersistedQueue.Persistence
 {
-    public class SqlitePersistence<T> : IPersistence<T>
+    public class SqlitePersistence<T> : IPersistence<T>, IDisposable
     {
         public SqlitePersistence(string filename)
         {
@@ -14,7 +14,12 @@ namespace PersistedQueue.Persistence
             throw new NotImplementedException();
         }
 
-        public T Load(long key)
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T Load(uint key)
         {
             throw new NotImplementedException();
         }
@@ -24,12 +29,12 @@ namespace PersistedQueue.Persistence
             throw new NotImplementedException();
         }
 
-        public void Persist(long key, T item)
+        public void Persist(uint key, T item)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(long key)
+        public void Remove(uint key)
         {
             throw new NotImplementedException();
         }
