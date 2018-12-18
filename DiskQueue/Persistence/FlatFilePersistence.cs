@@ -8,17 +8,17 @@ namespace PersistedQueue.Persistence
 {
     public class FlatFilePersistence<T> : IPersistence<T>, IDisposable
     {
-        private const string IndexFilename = "index";
         private const char IndexFileEntrySeparator = '\n';
         private const char IndexFileValueSeparator = '|';
-        
-        private readonly FileStream indexFileStream;
-        private readonly FileStream itemFileStream;
-        private readonly FileInfo itemFileInfo;
+
+        private readonly string indexFilename;
+        private readonly string itemFilename;
         private readonly BinaryFormatter binaryFormatter;
         private readonly object indexFileLock = new object();
         private readonly object itemFileLock = new object();
 
+        private FileStream indexFileStream;
+        private FileStream itemFileStream;
         private bool isDisposed;
 
         // TODO: In-memory dictionary to store partial or full index
@@ -26,17 +26,18 @@ namespace PersistedQueue.Persistence
         public FlatFilePersistence(string filename)
         {
             string directoryName = Path.GetDirectoryName(filename);
-            string indexFilename = Path.Combine(directoryName, IndexFilename);
+            string name = Path.GetFileName(filename);
+            indexFilename = Path.Combine(directoryName, $"~{name}");
+            itemFilename = filename;
             indexFileStream = new FileStream(indexFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-            itemFileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-            itemFileInfo = new FileInfo(filename);
+            itemFileStream = new FileStream(itemFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             binaryFormatter = new BinaryFormatter();
         }
 
         public void Clear()
         {
-            indexFileStream.SetLength(0);
-            itemFileStream.SetLength(0);
+            ResetIndexFile();
+            ResetItemFile();
         }
 
         public IEnumerable<T> Load()
@@ -62,10 +63,10 @@ namespace PersistedQueue.Persistence
             long serializedItemlength;
             lock (itemFileLock)
             {
-                originalFileLength = itemFileInfo.Length;
+                originalFileLength = itemFileStream.Length;
                 binaryFormatter.Serialize(itemFileStream, item);
-                itemFileInfo.Refresh();
-                serializedItemlength = itemFileInfo.Length - originalFileLength;
+                itemFileStream.Flush();
+                serializedItemlength = itemFileStream.Length - originalFileLength;
             }
             WriteIndex(key, originalFileLength, serializedItemlength);
         }
@@ -81,7 +82,23 @@ namespace PersistedQueue.Persistence
                 byte[] buffer = new byte[indexByteRange.Length];
                 indexFileStream.Position = indexByteRange.Start;
                 indexFileStream.Write(buffer, 0, indexByteRange.Length);
+                indexFileStream.Flush();
             }
+        }
+
+        public void Dispose()
+        {
+            if (!isDisposed)
+            {
+                isDisposed = true;
+                indexFileStream.Dispose();
+                itemFileStream.Dispose();
+            }
+        }
+
+        ~FlatFilePersistence()
+        {
+            Dispose();
         }
 
         private void WriteIndex(uint key, long position, long length)
@@ -156,13 +173,23 @@ namespace PersistedQueue.Persistence
             return default(ByteRange);
         }
 
-        public void Dispose()
+        private void ResetIndexFile()
         {
-            if (!isDisposed)
+            lock (indexFileLock)
             {
-                isDisposed = true;
                 indexFileStream.Dispose();
+                File.Delete(indexFilename);
+                indexFileStream = new FileStream(indexFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+            }
+        }
+
+        private void ResetItemFile()
+        {
+            lock (itemFileLock)
+            {
                 itemFileStream.Dispose();
+                File.Delete(itemFilename);
+                itemFileStream = new FileStream(itemFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             }
         }
 
@@ -175,11 +202,6 @@ namespace PersistedQueue.Persistence
             }
             public long Start { get; set; }
             public int Length { get; set; }
-        }
-
-        ~FlatFilePersistence()
-        {
-            Dispose();
         }
     }
 }

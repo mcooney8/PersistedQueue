@@ -50,6 +50,19 @@ namespace PersistedQueueTests
             }
         }
 
+        [Fact]
+        public void DequeueTwoItems()
+        {
+            // Arrange
+            PersistedQueue<int> queue = CreatePersistedQueue<int>(inMemoryCapacity: 1);
+            queue.Enqueue(0);
+            queue.Enqueue(1);
+
+            // Act / Assert
+            Assert.Equal(0, queue.Dequeue());
+            Assert.Equal(1, queue.Dequeue());
+        }
+
         [Theory]
         [InlineData(1)]
         [InlineData(2)]

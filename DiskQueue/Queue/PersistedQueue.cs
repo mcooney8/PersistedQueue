@@ -13,15 +13,8 @@ namespace PersistedQueue
         private readonly object queueLock = new object();
 
         private uint nextKey;
+        private uint firstKey = 1;
         private FixedArrayStack<T> loadedItems;
-        private FixedArrayStack<uint> loadedItemsKeys; // TODO: There has to be a better way to do this
-        private ArrayStack<uint> notLoadedKeys = new ArrayStack<uint>();
-
-        // Default persistence is Sqlite
-        public PersistedQueue(string filename, int maxItemsInMemory)
-            : this(new SqlitePersistence<T>(filename), maxItemsInMemory)
-        {
-        }
 
         public PersistedQueue(IPersistence<T> persistence, int maxItemsInMemory)
         {
@@ -31,7 +24,6 @@ namespace PersistedQueue
             }
             this.maxItemsInMemory = maxItemsInMemory;
             this.loadedItems = new FixedArrayStack<T>(maxItemsInMemory);
-            this.loadedItemsKeys = new FixedArrayStack<uint>(maxItemsInMemory);
             this.persistence = persistence;
         }
 
@@ -46,11 +38,6 @@ namespace PersistedQueue
                 if (Count < maxItemsInMemory)
                 {
                     loadedItems.Push(item);
-                    loadedItemsKeys.Push(nextKey);
-                }
-                else
-                {
-                    notLoadedKeys.Push(nextKey);
                 }
                 Count++;
             }
@@ -64,16 +51,16 @@ namespace PersistedQueue
                 {
                     throw new InvalidOperationException("Cannot dequeue from an empty queue");
                 }
+                Count--;
                 T itemToDequeue = loadedItems.Pop();
-                persistence.Remove(loadedItemsKeys.Pop());
-                if (notLoadedKeys.Count > 0)
+                persistence.Remove(firstKey++);
+                if (loadedItems.Count < Count)
                 {
-                    uint keyToLoad = notLoadedKeys.Pop();
+                    // TODO: Use background thread for this load operation and then add logic to make sure we wait for an item to be loaded before doing peek/dequeue
+                    uint keyToLoad = firstKey + (uint)loadedItems.Count; // TODO: Double check this
                     T newlyLoadedItem = persistence.Load(keyToLoad);
                     loadedItems.Push(newlyLoadedItem);
-                    loadedItemsKeys.Push(keyToLoad);
                 }
-                Count--;
                 return itemToDequeue;
             }
         }
@@ -98,7 +85,6 @@ namespace PersistedQueue
         public void Clear()
         {
             loadedItems.Clear();
-            notLoadedKeys.Clear();
             persistence.Clear();
         }
 
@@ -118,7 +104,7 @@ namespace PersistedQueue
             {
                 yield return item;
             }
-            foreach (uint key in notLoadedKeys)
+            for (uint key = (uint)loadedItems.Count + 1; key < Count; key++)
             {
                 yield return persistence.Load(key);
             }

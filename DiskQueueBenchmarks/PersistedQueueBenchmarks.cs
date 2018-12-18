@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using BenchmarkDotNet.Attributes;
 using PersistedQueue;
@@ -11,27 +10,39 @@ namespace PersistedQueueBenchmarks
     [MemoryDiagnoser]
     public class PersistedQueueBenchmarks
     {
-        [Params(10000)]
+        [Params(10000, 100000)]
         public int itemsToEnqueue;
 
-        [Params(10)]
+        [Params(10, 10000)]
         public int itemsToKeepInMemory;
 
         [Benchmark]
-        public void DiskQueueEnqueue()
+        public void FlatFileDiskQueueEnqueue()
         {
-            IPersistence<LargeData> persistence = new FlatFilePersistence<LargeData>("/Users/Michael/Projects/DiskQueue/persistence");
+            using (IPersistence<LargeData> persistence = new InMemoryPersistence<LargeData>())
+            {
+                PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
+                for (int i = 0; i < itemsToEnqueue; i++)
+                {
+                    queue.Enqueue(new LargeData());
+                }
+                queue.Clear();
+            }
+        }
+
+        [Benchmark]
+        public void InMemoryDiskQueueEnqueue()
+        {
+            IPersistence<LargeData> persistence = new InMemoryPersistence<LargeData>();
             PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
             for (int i = 0; i < itemsToEnqueue; i++)
             {
                 queue.Enqueue(new LargeData());
             }
-            queue.Clear();
-            persistence.Dispose();
         }
 
         [Benchmark]
-        public void NormalQueueDiskEnqueue()
+        public void NormalQueueEnqueue()
         {
             Queue<LargeData> queue = new Queue<LargeData>();
             for (int i = 0; i < itemsToEnqueue; i++)
