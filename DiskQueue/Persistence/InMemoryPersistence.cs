@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PersistedQueue.Persistence
 {
-    public class InMemoryPersistence<T> : IPersistence<T>, IDisposable
+    public class InMemoryPersistence<T> : IPersistence<T>
     {
         Dictionary<uint, T> items = new Dictionary<uint, T>();
 

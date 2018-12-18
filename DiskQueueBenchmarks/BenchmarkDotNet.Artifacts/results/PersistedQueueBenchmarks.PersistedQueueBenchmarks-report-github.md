@@ -8,11 +8,11 @@ Intel Core i7-4870HQ CPU 2.50GHz (Haswell), 1 CPU, 8 logical and 4 physical core
 
 
 ```
-|                   Method | itemsToEnqueue | itemsToKeepInMemory | enqueueOnly |       Mean |       Error |        StdDev | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|------------------------- |--------------- |-------------------- |------------ |-----------:|------------:|--------------:|------------:|------------:|------------:|--------------------:|
-| **FlatFileDiskQueueEnqueue** |          **10000** |                  **10** |       **False** | **6,960.3 ms** | **487.6374 ms** | **1,399.1231 ms** | **605000.0000** |  **98000.0000** |           **-** |          **3635.12 MB** |
-| InMemoryDiskQueueEnqueue |          10000 |                  10 |       False |   536.1 ms |  10.1673 ms |     9.5105 ms |  13000.0000 |   5000.0000 |   1000.0000 |            73.61 MB |
-|       NormalQueueEnqueue |          10000 |                  10 |       False |   522.1 ms |   1.2931 ms |     1.2096 ms |  13000.0000 |   5000.0000 |   1000.0000 |            72.96 MB |
-| **FlatFileDiskQueueEnqueue** |          **10000** |                  **10** |        **True** |   **979.9 ms** |  **18.6573 ms** |    **18.3240 ms** |  **18000.0000** |           **-** |           **-** |           **111.56 MB** |
-| InMemoryDiskQueueEnqueue |          10000 |                  10 |        True |   525.2 ms |   0.8769 ms |     0.8202 ms |  13000.0000 |   5000.0000 |   1000.0000 |            73.61 MB |
-|       NormalQueueEnqueue |          10000 |                  10 |        True |   521.7 ms |   1.2982 ms |     1.0841 ms |  13000.0000 |   5000.0000 |   1000.0000 |            72.96 MB |
+|                   Method | itemsToEnqueue | itemsToKeepInMemory | enqueueOnly |       Mean |      Error |       StdDev | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
+|------------------------- |--------------- |-------------------- |------------ |-----------:|-----------:|-------------:|------------:|------------:|------------:|--------------------:|
+| **FlatFileDiskQueueEnqueue** |          **10000** |                  **10** |       **False** | **5,598.7 ms** | **353.723 ms** | **1,037.408 ms** | **605000.0000** |  **98000.0000** |           **-** |          **3635.12 MB** |
+| InMemoryDiskQueueEnqueue |          10000 |                  10 |       False |   430.0 ms |   4.563 ms |     4.268 ms |  13000.0000 |   5000.0000 |   1000.0000 |            73.61 MB |
+|       NormalQueueEnqueue |          10000 |                  10 |       False |   430.2 ms |   2.377 ms |     2.107 ms |  13000.0000 |   5000.0000 |   1000.0000 |            72.96 MB |
+| **FlatFileDiskQueueEnqueue** |          **10000** |                  **10** |        **True** |   **773.6 ms** |   **8.690 ms** |     **7.703 ms** |  **18000.0000** |           **-** |           **-** |           **111.57 MB** |
+| InMemoryDiskQueueEnqueue |          10000 |                  10 |        True |   429.5 ms |   1.498 ms |     1.401 ms |  13000.0000 |   5000.0000 |   1000.0000 |            73.61 MB |
+|       NormalQueueEnqueue |          10000 |                  10 |        True |   427.9 ms |   3.462 ms |     2.891 ms |  13000.0000 |   5000.0000 |   1000.0000 |            72.96 MB |

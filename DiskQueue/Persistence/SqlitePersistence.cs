@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PersistedQueue.Persistence
 {
-    public class SqlitePersistence<T> : IPersistence<T>, IDisposable
+    public class SqlitePersistence<T> : IPersistence<T>
     {
         public SqlitePersistence(string filename)
         {

@@ -16,7 +16,7 @@ namespace PersistedQueue
         private uint firstKey = 1;
         private FixedArrayStack<T> loadedItems;
 
-        public PersistedQueue(IPersistence<T> persistence, int maxItemsInMemory)
+        public PersistedQueue(IPersistence<T> persistence, int maxItemsInMemory, bool deferLoad = false)
         {
             if (maxItemsInMemory < 1)
             {
@@ -25,6 +25,10 @@ namespace PersistedQueue
             this.maxItemsInMemory = maxItemsInMemory;
             this.loadedItems = new FixedArrayStack<T>(maxItemsInMemory);
             this.persistence = persistence;
+            if (!deferLoad)
+            {
+                Load();
+            }
         }
 
         public int Count { get; private set; }
@@ -57,7 +61,7 @@ namespace PersistedQueue
                 if (loadedItems.Count < Count)
                 {
                     // TODO: Use background thread for this load operation and then add logic to make sure we wait for an item to be loaded before doing peek/dequeue
-                    uint keyToLoad = firstKey + (uint)loadedItems.Count; // TODO: Double check this
+                    uint keyToLoad = firstKey + (uint)loadedItems.Count;
                     T newlyLoadedItem = persistence.Load(keyToLoad);
                     loadedItems.Push(newlyLoadedItem);
                 }

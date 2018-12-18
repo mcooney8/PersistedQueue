@@ -6,6 +6,8 @@ namespace PersistedQueue
 {
     internal class FixedArrayStack<T> : IEnumerable<T>
     {
+        private const int DefaultStartingSize = 1024;
+
         private readonly int capacity;
         private T[] items;
         private int headIndex;
@@ -13,7 +15,8 @@ namespace PersistedQueue
         public FixedArrayStack(int capacity)
         {
             this.capacity = capacity;
-            items = new T[capacity]; // TODO: only allocate up to some max starting amount and then expand as needed
+            int startingSize = Math.Min(DefaultStartingSize, capacity);
+            items = new T[startingSize];
         }
 
         public int Count { get; private set; }
@@ -23,6 +26,10 @@ namespace PersistedQueue
             if (Count == capacity)
             {
                 throw new InvalidOperationException("Cannot push any more items, stack is full");
+            }
+            if (Count == items.Length)
+            {
+                ExpandArray();
             }
             int index = (headIndex + Count) % capacity;
             items[index] = item;
@@ -79,6 +86,18 @@ namespace PersistedQueue
             {
                 int index = (headIndex + i) % capacity;
                 yield return items[index];
+            }
+        }
+
+        private void ExpandArray()
+        {
+            int newArrayLength = Math.Min(items.Length * 2, capacity);
+            if (newArrayLength != items.Length)
+            {
+                T[] newArray = new T[newArrayLength];
+                Array.Copy(items, headIndex, newArray, 0, Count);
+                items = newArray;
+                headIndex = 0;
             }
         }
     }

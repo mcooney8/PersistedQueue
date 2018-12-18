@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PersistedQueue.Persistence
 {
-    public class FlatFilePersistence<T> : IPersistence<T>, IDisposable
+    public class FlatFilePersistence<T> : IPersistence<T>
     {
         private const char IndexFileEntrySeparator = '\n';
         private const char IndexFileValueSeparator = '|';
@@ -42,7 +42,10 @@ namespace PersistedQueue.Persistence
 
         public IEnumerable<T> Load()
         {
-            throw new NotImplementedException();
+            foreach (uint key in GetKeys())
+            {
+                yield return Load(key);
+            }
         }
 
         public T Load(uint key)
@@ -173,7 +176,7 @@ namespace PersistedQueue.Persistence
                         continue;
                     }
                     string[] entryParts = entry.Split(IndexFileValueSeparator);
-                    if (long.TryParse(entryParts[0], out long entryKey) && entryKey == key)
+                    if (uint.TryParse(entryParts[0], out uint entryKey) && entryKey == key)
                     {
                         return new ByteRange(lastPosition, entryLength);
                     }
@@ -181,6 +184,28 @@ namespace PersistedQueue.Persistence
                 }
             }
             return default(ByteRange);
+        }
+
+        private IEnumerable<uint> GetKeys()
+        {
+            lock (indexFileLock)
+            {
+                indexFileStream.Seek(0, SeekOrigin.Begin);
+                StreamReader indexReader = new StreamReader(indexFileStream);
+                while (!indexReader.EndOfStream)
+                {
+                    string entry = indexReader.ReadLine();
+                    if (entry.StartsWith('r'))
+                    {
+                        continue;
+                    }
+                    string[] entryParts = entry.Split(IndexFileValueSeparator);
+                    if (uint.TryParse(entryParts[0], out uint entryKey))
+                    {
+                        yield return entryKey;
+                    }
+                }
+            }
         }
 
         private void ResetIndexFile()
