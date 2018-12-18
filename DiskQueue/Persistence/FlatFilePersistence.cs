@@ -48,6 +48,10 @@ namespace PersistedQueue.Persistence
         public T Load(uint key)
         {
             ByteRange byteRange = GetItemByteRange(key);
+            if (byteRange.Equals(default(ByteRange)))
+            {
+                throw new Exception($"Unable to load key: {key}");
+            }
             byte[] buffer = new byte[byteRange.Length];
             lock (itemFileLock)
             {
@@ -63,10 +67,10 @@ namespace PersistedQueue.Persistence
             long serializedItemlength;
             lock (itemFileLock)
             {
-                originalFileLength = itemFileStream.Length;
+                originalFileLength = itemFileStream.Position;
                 binaryFormatter.Serialize(itemFileStream, item);
                 itemFileStream.Flush();
-                serializedItemlength = itemFileStream.Length - originalFileLength;
+                serializedItemlength = itemFileStream.Position - originalFileLength;
             }
             WriteIndex(key, originalFileLength, serializedItemlength);
         }
@@ -74,14 +78,14 @@ namespace PersistedQueue.Persistence
         // TODO: This whole method needs to be rethought
         // - How to efficiently remove from index file
         // - How to efficiently remove from item file
+        private static byte[] RemoveBytes = Encoding.ASCII.GetBytes("r");
         public void Remove(uint key)
         {
             ByteRange indexByteRange = GetIndexByteRange(key);
             lock (indexFileLock)
             {
-                byte[] buffer = new byte[indexByteRange.Length];
                 indexFileStream.Position = indexByteRange.Start;
-                indexFileStream.Write(buffer, 0, indexByteRange.Length);
+                indexFileStream.Write(RemoveBytes, 0, RemoveBytes.Length);
                 indexFileStream.Flush();
             }
         }
@@ -103,18 +107,18 @@ namespace PersistedQueue.Persistence
 
         private void WriteIndex(uint key, long position, long length)
         {
-            ReadOnlySpan<byte> entryToWrite = CreateEntry(key, position, length);
+            byte[] entry = CreateEntry(key, position, length);
             lock (indexFileLock)
             {
                 // TODO: Depending on how remove ends up looking, I may want to check for a gap in the
                 // file to fill in here instead of simply appending to the end
                 indexFileStream.Seek(0, SeekOrigin.End);
-                indexFileStream.Write(entryToWrite);
+                indexFileStream.Write(entry);
                 indexFileStream.Flush();
             }
         }
 
-        private ReadOnlySpan<byte> CreateEntry(uint key, long position, long length)
+        private byte[] CreateEntry(uint key, long position, long length)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(key);
@@ -123,7 +127,7 @@ namespace PersistedQueue.Persistence
             sb.Append(IndexFileValueSeparator);
             sb.Append(length);
             sb.Append(IndexFileEntrySeparator);
-            return Encoding.ASCII.GetBytes(sb.ToString()).AsSpan();
+            return Encoding.ASCII.GetBytes(sb.ToString());
         }
 
         private ByteRange GetItemByteRange(uint key)
@@ -136,7 +140,7 @@ namespace PersistedQueue.Persistence
                 while (!indexReader.EndOfStream)
                 {
                     string entry = indexReader.ReadLine();
-                    if (!entry.Contains(IndexFileValueSeparator))
+                    if (entry.StartsWith('r'))
                     {
                         continue;
                     }
@@ -162,12 +166,18 @@ namespace PersistedQueue.Persistence
                 while (!indexReader.EndOfStream)
                 {
                     string entry = indexReader.ReadLine();
+                    int entryLength = entry.Length + 1; // + 1 for newline character
+                    if (entry.StartsWith('r'))
+                    {
+                        lastPosition += entryLength;
+                        continue;
+                    }
                     string[] entryParts = entry.Split(IndexFileValueSeparator);
                     if (long.TryParse(entryParts[0], out long entryKey) && entryKey == key)
                     {
-                        long length = indexReader.BaseStream.Position - lastPosition;
-                        return new ByteRange(lastPosition, (int)length);
+                        return new ByteRange(lastPosition, entryLength);
                     }
+                    lastPosition += entryLength;
                 }
             }
             return default(ByteRange);

@@ -10,23 +10,51 @@ namespace PersistedQueueBenchmarks
     [MemoryDiagnoser]
     public class PersistedQueueBenchmarks
     {
-        [Params(10000, 100000)]
+        [Params(10000)]
         public int itemsToEnqueue;
 
-        [Params(10, 10000)]
+        [Params(10)]
         public int itemsToKeepInMemory;
+
+        [Params(true, false)]
+        public bool enqueueOnly;
+
+        [GlobalSetup]
+        public void GlobalSetup()
+        {
+            IPersistence<LargeData> persistence = new FlatFilePersistence<LargeData>("/Users/Michael/Projects/DiskQueue/persistence");
+            persistence.Clear();
+            persistence.Dispose();
+        }
 
         [Benchmark]
         public void FlatFileDiskQueueEnqueue()
         {
-            using (IPersistence<LargeData> persistence = new InMemoryPersistence<LargeData>())
+            IPersistence<LargeData> persistence = null;
+            try
             {
+                persistence = new FlatFilePersistence<LargeData>("/Users/Michael/Projects/DiskQueue/persistence");
                 PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
                 for (int i = 0; i < itemsToEnqueue; i++)
                 {
                     queue.Enqueue(new LargeData());
                 }
-                queue.Clear();
+                if (enqueueOnly)
+                {
+                    queue.Clear();
+                }
+                else
+                {
+                    for (int i = 0; i < itemsToEnqueue; i++)
+                    {
+                        queue.Dequeue();
+                    }
+                }
+            }
+            finally
+            {
+                persistence?.Clear();
+                persistence?.Dispose();
             }
         }
 
@@ -39,6 +67,17 @@ namespace PersistedQueueBenchmarks
             {
                 queue.Enqueue(new LargeData());
             }
+            if (enqueueOnly)
+            {
+                queue.Clear();
+            }
+            else
+            {
+                for (int i = 0; i < itemsToEnqueue; i++)
+                {
+                    queue.Dequeue();
+                }
+            }
         }
 
         [Benchmark]
@@ -49,7 +88,17 @@ namespace PersistedQueueBenchmarks
             {
                 queue.Enqueue(new LargeData());
             }
-            queue.Clear();
+            if (enqueueOnly)
+            {
+                queue.Clear();
+            }
+            else
+            {
+                for (int i = 0; i < itemsToEnqueue; i++)
+                {
+                    queue.Dequeue();
+                }
+            }
         }
 
         [Serializable]
