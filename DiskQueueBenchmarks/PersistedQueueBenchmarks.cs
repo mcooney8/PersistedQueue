@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using BenchmarkDotNet.Attributes;
 using PersistedQueue;
@@ -10,45 +11,86 @@ namespace PersistedQueueBenchmarks
     [MemoryDiagnoser]
     public class PersistedQueueBenchmarks
     {
-        [Params(10000)]
-        public int itemsToEnqueue;
+        private const string PersistenceFilename = "persistence";
 
-        [Params(10)]
+        [Params(100, 10000)]
+        public int totalItems;
+
+        [Params(1000)]
         public int itemsToKeepInMemory;
 
         [Params(true, false)]
-        public bool enqueueOnly;
+        public bool useLargeData;
 
-        [GlobalSetup]
+        //[GlobalSetup]
         public void GlobalSetup()
         {
-            IPersistence<LargeData> persistence = new FlatFilePersistence<LargeData>("/Users/Michael/Projects/DiskQueue/persistence");
+            IPersistence<LargeData> persistence = new FlatFilePersistence<LargeData>(PersistenceFilename);
             persistence.Clear();
             persistence.Dispose();
+            if (new FileInfo(PersistenceFilename).Length > 0)
+            {
+                throw new Exception("Unexpected length");
+            }
+        }
+
+        //[Benchmark]
+        public void PersistentQueueFlatFilePersistence()
+        {
+            if (new FileInfo(PersistenceFilename).Length > 0)
+            {
+                throw new Exception("Unexpected length");
+            }
+            if (useLargeData)
+            {
+                FlatFileLargeData();
+            }
+            else
+            {
+                FlatFileInt();
+            }
         }
 
         [Benchmark]
-        public void FlatFileDiskQueueEnqueue()
+        public void PersistentQueueInMemoryPersistence()
+        {
+            if (useLargeData)
+            {
+                InMemoryLargeData();
+            }
+            else
+            {
+                InMemoryInt();
+            }
+        }
+
+        [Benchmark]
+        public void NormalQueue()
+        {
+            if (useLargeData)
+            {
+                NormalQueueLargeData();
+            }
+            else
+            {
+                NormalQueueInt();
+            }
+        }
+
+        private void FlatFileLargeData()
         {
             IPersistence<LargeData> persistence = null;
             try
             {
-                persistence = new FlatFilePersistence<LargeData>("/Users/Michael/Projects/DiskQueue/persistence");
+                persistence = new FlatFilePersistence<LargeData>(PersistenceFilename);
                 PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
-                for (int i = 0; i < itemsToEnqueue; i++)
+                for (int i = 0; i < totalItems; i++)
                 {
                     queue.Enqueue(new LargeData());
                 }
-                if (enqueueOnly)
+                for (int i = 0; i < totalItems; i++)
                 {
-                    queue.Clear();
-                }
-                else
-                {
-                    for (int i = 0; i < itemsToEnqueue; i++)
-                    {
-                        queue.Dequeue();
-                    }
+                    queue.Dequeue();
                 }
             }
             finally
@@ -58,64 +100,81 @@ namespace PersistedQueueBenchmarks
             }
         }
 
-        [Benchmark]
-        public void InMemoryDiskQueueEnqueue()
+        private void FlatFileInt()
+        {
+            IPersistence<int> persistence = null;
+            try
+            {
+                persistence = new FlatFilePersistence<int>(PersistenceFilename);
+                PersistedQueue<int> queue = new PersistedQueue<int>(persistence, itemsToKeepInMemory);
+                for (int i = 0; i < totalItems; i++)
+                {
+                    queue.Enqueue(i);
+                }
+                for (int i = 0; i < totalItems; i++)
+                {
+                    queue.Dequeue();
+                }
+            }
+            finally
+            {
+                persistence?.Clear();
+                persistence?.Dispose();
+            }
+        }
+
+        private void InMemoryLargeData()
         {
             IPersistence<LargeData> persistence = new InMemoryPersistence<LargeData>();
             PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
-            for (int i = 0; i < itemsToEnqueue; i++)
+            for (int i = 0; i < totalItems; i++)
             {
                 queue.Enqueue(new LargeData());
             }
-            if (enqueueOnly)
+            for (int i = 0; i < totalItems; i++)
             {
-                queue.Clear();
-            }
-            else
-            {
-                for (int i = 0; i < itemsToEnqueue; i++)
-                {
-                    queue.Dequeue();
-                }
+                queue.Dequeue();
             }
         }
 
-        [Benchmark]
-        public void NormalQueueEnqueue()
+        private void InMemoryInt()
+        {
+            IPersistence<int> persistence = new InMemoryPersistence<int>();
+            PersistedQueue<int> queue = new PersistedQueue<int>(persistence, itemsToKeepInMemory);
+            for (int i = 0; i < totalItems; i++)
+            {
+                queue.Enqueue(i);
+            }
+            for (int i = 0; i < totalItems; i++)
+            {
+                queue.Dequeue();
+            }
+        }
+
+        private void NormalQueueLargeData()
         {
             Queue<LargeData> queue = new Queue<LargeData>();
-            for (int i = 0; i < itemsToEnqueue; i++)
+            for (int i = 0; i < totalItems; i++)
             {
                 queue.Enqueue(new LargeData());
             }
-            if (enqueueOnly)
+            for (int i = 0; i < totalItems; i++)
             {
-                queue.Clear();
-            }
-            else
-            {
-                for (int i = 0; i < itemsToEnqueue; i++)
-                {
-                    queue.Dequeue();
-                }
+                queue.Dequeue();
             }
         }
 
-        [Serializable]
-        private class Data
+        private void NormalQueueInt()
         {
-            public Data()
+            Queue<int> queue = new Queue<int>();
+            for (int i = 0; i < totalItems; i++)
             {
-                Random random = new Random();
-                DoubleValue = random.NextDouble();
-                byte[] buffer = new byte[100];
-                random.NextBytes(buffer);
-                StringValue = Encoding.ASCII.GetString(buffer);
-                BoolValue = random.Next() % 2 == 0;
+                queue.Enqueue(i);
             }
-            public double DoubleValue { get; }
-            public string StringValue { get; }
-            public bool BoolValue { get; }
+            for (int i = 0; i < totalItems; i++)
+            {
+                queue.Dequeue();
+            }
         }
 
         [Serializable]

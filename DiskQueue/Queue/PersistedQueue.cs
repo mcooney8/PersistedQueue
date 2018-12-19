@@ -73,7 +73,7 @@ namespace PersistedQueue
         {
             lock (queueLock)
             {
-                if (inMemoryItems.Count == 0)
+                if (Count == 0)
                 {
                     throw new InvalidOperationException("Cannot dequeue from an empty queue");
                 }
@@ -82,10 +82,7 @@ namespace PersistedQueue
                 persistence.Remove(firstKey++);
                 if (inMemoryItems.Count < Count)
                 {
-                    // TODO: Use background thread for this load operation and then add logic to make sure we wait for an item to be loaded before doing peek/dequeue
-                    uint keyToLoad = firstKey + (uint)inMemoryItems.Count;
-                    T newlyLoadedItem = persistence.Load(keyToLoad);
-                    inMemoryItems.Push(newlyLoadedItem);
+                    LoadNextItem();
                 }
                 return itemToDequeue;
             }
@@ -151,6 +148,15 @@ namespace PersistedQueue
             {
                 yield return persistence.Load(key);
             }
+        }
+
+        private void LoadNextItem()
+        {
+            // TODO: Use background thread for this load operation and then add
+            // logic to make sure we wait for an item to be loaded before doing other operations
+            uint keyToLoad = firstKey + (uint)inMemoryItems.Count;
+            T newlyLoadedItem = persistence.Load(keyToLoad);
+            inMemoryItems.Push(newlyLoadedItem);
         }
     }
 }
