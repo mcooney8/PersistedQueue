@@ -5,17 +5,27 @@ using PersistedQueue.Persistence;
 
 namespace PersistedQueue
 {
-    // TODO: summary comments for public methods and class level
+    /// <summary>
+    /// Persisted queue.
+    /// </summary>
     public class PersistedQueue<T> : IEnumerable<T>, IReadOnlyCollection<T>
     {
         private readonly IPersistence<T> persistence;
         private readonly int maxItemsInMemory;
+        private readonly FixedArrayStack<T> inMemoryItems;
         private readonly object queueLock = new object();
 
         private uint nextKey;
         private uint firstKey = 1;
-        private FixedArrayStack<T> loadedItems;
 
+        private bool isLoaded;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:PersistedQueue.PersistedQueue`1"/> class.
+        /// </summary>
+        /// <param name="persistence">Persistence.</param>
+        /// <param name="maxItemsInMemory">Max items in memory.</param>
+        /// <param name="deferLoad">If set to <c>true</c> defer load.</param>
         public PersistedQueue(IPersistence<T> persistence, int maxItemsInMemory, bool deferLoad = false)
         {
             if (maxItemsInMemory < 1)
@@ -23,7 +33,7 @@ namespace PersistedQueue
                 throw new ArgumentException("Must be greater than 0", nameof(maxItemsInMemory));
             }
             this.maxItemsInMemory = maxItemsInMemory;
-            this.loadedItems = new FixedArrayStack<T>(maxItemsInMemory);
+            this.inMemoryItems = new FixedArrayStack<T>(maxItemsInMemory);
             this.persistence = persistence;
             if (!deferLoad)
             {
@@ -31,8 +41,16 @@ namespace PersistedQueue
             }
         }
 
+        /// <summary>
+        /// Gets the count of items
+        /// </summary>
+        /// <value>The count of items</value>
         public int Count { get; private set; }
 
+        /// <summary>
+        /// Enqueue the specified item.
+        /// </summary>
+        /// <param name="item">Item to be enqueued</param>
         public void Enqueue(T item)
         {
             lock (queueLock)
@@ -41,54 +59,75 @@ namespace PersistedQueue
                 persistence.Persist(nextKey, item);
                 if (Count < maxItemsInMemory)
                 {
-                    loadedItems.Push(item);
+                    inMemoryItems.Push(item);
                 }
                 Count++;
             }
         }
 
+        /// <summary>
+        /// Removes the top item and returns it
+        /// </summary>
+        /// <returns>The dequeued item</returns>
         public T Dequeue()
         {
             lock (queueLock)
             {
-                if (loadedItems.Count == 0)
+                if (inMemoryItems.Count == 0)
                 {
                     throw new InvalidOperationException("Cannot dequeue from an empty queue");
                 }
                 Count--;
-                T itemToDequeue = loadedItems.Pop();
+                T itemToDequeue = inMemoryItems.Pop();
                 persistence.Remove(firstKey++);
-                if (loadedItems.Count < Count)
+                if (inMemoryItems.Count < Count)
                 {
                     // TODO: Use background thread for this load operation and then add logic to make sure we wait for an item to be loaded before doing peek/dequeue
-                    uint keyToLoad = firstKey + (uint)loadedItems.Count;
+                    uint keyToLoad = firstKey + (uint)inMemoryItems.Count;
                     T newlyLoadedItem = persistence.Load(keyToLoad);
-                    loadedItems.Push(newlyLoadedItem);
+                    inMemoryItems.Push(newlyLoadedItem);
                 }
                 return itemToDequeue;
             }
         }
 
+        /// <summary>
+        /// Returns the top item without removing it
+        /// </summary>
+        /// <returns>The peeked item</returns>
         public T Peek()
         {
-            if (loadedItems.Count == 0)
+            if (inMemoryItems.Count == 0)
             {
                 throw new InvalidOperationException("Cannot peek an empty queue");
             }
-            return loadedItems.Peek();
+            return inMemoryItems.Peek();
         }
 
+        /// <summary>
+        /// Loads all items from persistence (only use this if deferring the load)
+        /// </summary>
         public void Load()
         {
-            foreach (T loadedItem in persistence.Load())
+            lock (queueLock)
             {
-                Enqueue(loadedItem);
+                if (!isLoaded)
+                {
+                    foreach (T loadedItem in persistence.Load())
+                    {
+                        Enqueue(loadedItem);
+                    }
+                    isLoaded = true;
+                }
             }
         }
 
+        /// <summary>
+        /// Clears all items from this structure and persistence
+        /// </summary>
         public void Clear()
         {
-            loadedItems.Clear();
+            inMemoryItems.Clear();
             persistence.Clear();
         }
 
@@ -104,11 +143,11 @@ namespace PersistedQueue
 
         private IEnumerable<T> GetItems()
         {
-            foreach (T item in loadedItems)
+            foreach (T item in inMemoryItems)
             {
                 yield return item;
             }
-            for (uint key = (uint)loadedItems.Count + 1; key < Count; key++)
+            for (uint key = (uint)inMemoryItems.Count + 1; key < Count; key++)
             {
                 yield return persistence.Load(key);
             }
