@@ -17,3 +17,42 @@ int i = persistentQueue.Dequeue();
 PersistentQueue<int> persistentQueue = new PersistentQueue<int>(flatFilePersistence, maxItemsInMemory: 1024, deferLoad: true);
 persistentQueue.Load();
 ```
+
+# Custom Persistence
+One of the main things I wanted to accomplish with this library is allow you to use your own persistence and not have to add additional dependencies that you wouldn't need. All you need to do implement your own persistence is implement the IPersistence interface and pass it as a constructor parameter.
+A simple (but useless) example is the in memory one included for testing:
+```c#
+public class InMemoryPersistence<T> : IPersistence<T>
+{
+    Dictionary<uint, T> items = new Dictionary<uint, T>();
+
+    public T Load(uint key)
+    {
+        return items[key];
+    }
+
+    public void Persist(uint key, T item)
+    {
+        items[key] = item;
+    }
+
+    public void Remove(uint key)
+    {
+        items.Remove(key);
+    }
+
+    public void Clear()
+    {
+        items.Clear();
+    }
+
+    public IEnumerable<T> Load()
+    {
+        return new List<T>();
+    }
+
+    public void Dispose()
+    {
+    }
+}
+```
