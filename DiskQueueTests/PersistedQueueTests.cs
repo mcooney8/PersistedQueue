@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using PersistedQueue;
 using PersistedQueue.Persistence;
 using Xunit;
@@ -13,7 +14,7 @@ namespace PersistedQueueTests
         [InlineData(1024)]
         [InlineData(1025)]
         [InlineData(2048)]
-        public void Enqueue(int numberOfItems)
+        public async Task Enqueue(int numberOfItems)
         {
             // Arrange
             PersistedQueue<int> queue = CreatePersistedQueue<int>();
@@ -25,7 +26,7 @@ namespace PersistedQueueTests
             }
 
             // Assert
-            Assert.Equal(0, queue.Peek());
+            Assert.Equal(0, await queue.PeekAsync());
         }
 
         [Theory]
@@ -34,7 +35,7 @@ namespace PersistedQueueTests
         [InlineData(1024)]
         [InlineData(1025)]
         [InlineData(2048)]
-        public void Dequeue(int numberOfItems)
+        public async Task Dequeue(int numberOfItems)
         {
             // Arrange
             PersistedQueue<int> queue = CreatePersistedQueue<int>();
@@ -46,12 +47,12 @@ namespace PersistedQueueTests
             // Act / Assert
             for (int i = 0; i < numberOfItems; i++)
             {
-                Assert.Equal(i, queue.Dequeue());
+                Assert.Equal(i, await queue.DequeueAsync());
             }
         }
 
         [Fact]
-        public void DequeueTwoItems()
+        public async Task DequeueTwoItems()
         {
             // Arrange
             PersistedQueue<int> queue = CreatePersistedQueue<int>(inMemoryCapacity: 1);
@@ -59,8 +60,8 @@ namespace PersistedQueueTests
             queue.Enqueue(1);
 
             // Act / Assert
-            Assert.Equal(0, queue.Dequeue());
-            Assert.Equal(1, queue.Dequeue());
+            Assert.Equal(0, await queue.DequeueAsync());
+            Assert.Equal(1, await queue.DequeueAsync());
         }
 
         [Theory]
@@ -82,7 +83,7 @@ namespace PersistedQueueTests
             for (int i = 0; i < numberOfItems; i++)
             {
                 Assert.Equal(numberOfItems - i, queue.Count);
-                queue.Dequeue();
+                queue.DequeueAsync();
             }
             Assert.Empty(queue);
         }

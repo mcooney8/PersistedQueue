@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PersistedQueue.Persistence
 {
@@ -226,6 +227,11 @@ namespace PersistedQueue.Persistence
                 File.Delete(itemFilename);
                 itemFileStream = new FileStream(itemFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             }
+        }
+
+        public Task<T> LoadAsync(uint key)
+        {
+            return Task.Run(() => Load(key));
         }
 
         private struct ByteRange

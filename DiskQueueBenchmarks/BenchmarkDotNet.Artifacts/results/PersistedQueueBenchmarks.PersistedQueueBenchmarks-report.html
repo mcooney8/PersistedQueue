@@ -16,22 +16,16 @@
 BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14 (18A391) [Darwin 18.0.0]
 Intel Core i7-4870HQ CPU 2.50GHz (Haswell), 1 CPU, 8 logical and 4 physical cores
 .NET Core SDK=2.1.302
-  [Host]     : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT  [AttachedDebugger]
-  DefaultJob : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
+  [Host] : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT  [AttachedDebugger]
 </code></pre>
 <pre><code></code></pre>
 
 <table>
-<thead><tr><th>                      Method</th><th>totalItems</th><th>itemsToKeepInMemory</th><th>useLargeData</th><th>      Mean</th><th>    Error</th><th>   StdDev</th><th>Gen 0/1k Op</th><th>Gen 1/1k Op</th><th>Gen 2/1k Op</th><th>Allocated Memory/Op</th>
+<thead><tr><th>                        Method</th><th>totalItems</th><th>itemsToKeepInMemory</th><th>useLargeData</th><th>Mean</th><th>Error</th>
 </tr>
-</thead><tbody><tr><td>PersistentQueueInMemoryPersistence</td><td>100</td><td>1000</td><td>False</td><td>8,644.0 ns</td><td>25.40 ns</td><td>22.52 ns</td><td>1.8463</td><td>0.0458</td><td>-</td><td>11.38 KB</td>
-</tr><tr><td>NormalQueue</td><td>100</td><td>1000</td><td>False</td><td>884.3 ns</td><td>12.71 ns</td><td>10.62 ns</td><td>0.1898</td><td>-</td><td>-</td><td>1.17 KB</td>
-</tr><tr><td>PersistentQueueInMemoryPersistence</td><td>100</td><td>1000</td><td>True</td><td>3,832,262.5 ns</td><td>11,964.83 ns</td><td>9,991.18 ns</td><td>121.0938</td><td>54.6875</td><td>-</td><td>762.55 KB</td>
-</tr><tr><td>NormalQueue</td><td>100</td><td>1000</td><td>True</td><td>3,819,641.5 ns</td><td>19,937.63 ns</td><td>17,674.19 ns</td><td>121.0938</td><td>46.8750</td><td>-</td><td>746.69 KB</td>
-</tr><tr><td>PersistentQueueInMemoryPersistence</td><td>10000</td><td>1000</td><td>False</td><td>1,022,920.6 ns</td><td>4,298.67 ns</td><td>4,020.97 ns</td><td>123.0469</td><td>123.0469</td><td>123.0469</td><td>661.45 KB</td>
-</tr><tr><td>NormalQueue</td><td>10000</td><td>1000</td><td>False</td><td>69,536.8 ns</td><td>464.85 ns</td><td>412.08 ns</td><td>20.7520</td><td>-</td><td>-</td><td>128.34 KB</td>
-</tr><tr><td>PersistentQueueInMemoryPersistence</td><td>10000</td><td>1000</td><td>True</td><td>428,620,866.7 ns</td><td>4,723,847.08 ns</td><td>4,418,689.49 ns</td><td>13000.0000</td><td>5000.0000</td><td>1000.0000</td><td>75382.79 KB</td>
-</tr><tr><td>NormalQueue</td><td>10000</td><td>1000</td><td>True</td><td>423,134,642.9 ns</td><td>2,246,696.72 ns</td><td>1,991,638.12 ns</td><td>13000.0000</td><td>5000.0000</td><td>1000.0000</td><td>74713.1 KB</td>
+</thead><tbody><tr><td>PersistentQueueSqliteFilePersistence</td><td>1000</td><td>100</td><td>True</td><td>NA</td><td>NA</td>
+</tr><tr><td>PersistentQueueInMemoryPersistence</td><td>1000</td><td>100</td><td>True</td><td>NA</td><td>NA</td>
+</tr><tr><td>NormalQueue</td><td>1000</td><td>100</td><td>True</td><td>NA</td><td>NA</td>
 </tr></tbody></table>
 </body>
 </html>

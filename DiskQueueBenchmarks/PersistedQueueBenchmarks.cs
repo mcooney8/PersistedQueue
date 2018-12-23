@@ -5,21 +5,23 @@ using System.Text;
 using BenchmarkDotNet.Attributes;
 using PersistedQueue;
 using PersistedQueue.Persistence;
+using PersistedQueue.Sqlite;
 
 namespace PersistedQueueBenchmarks
 {
+    // TODO: Split out benchmark definitions into separate class files
     [MemoryDiagnoser]
     public class PersistedQueueBenchmarks
     {
         private const string PersistenceFilename = "persistence";
 
-        [Params(100, 10000)]
+        [Params(1000)]
         public int totalItems;
 
-        [Params(1000)]
+        [Params(100)]
         public int itemsToKeepInMemory;
 
-        [Params(true, false)]
+        [Params(true)]
         public bool useLargeData;
 
         //[GlobalSetup]
@@ -31,6 +33,26 @@ namespace PersistedQueueBenchmarks
             if (new FileInfo(PersistenceFilename).Length > 0)
             {
                 throw new Exception("Unexpected length");
+            }
+        }
+
+        [Benchmark]
+        public void PersistentQueueSqliteFilePersistence()
+        {
+            IPersistence<LargeData> persistence = null;
+            try
+            {
+                persistence = new SqlitePersistence<LargeData>(PersistenceFilename);
+                PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
+                for (int i = 0; i < totalItems; i++)
+                {
+                    queue.Enqueue(new LargeData());
+                }
+            }
+            finally
+            {
+                persistence?.Clear();
+                persistence?.Dispose();
             }
         }
 
@@ -90,7 +112,7 @@ namespace PersistedQueueBenchmarks
                 }
                 for (int i = 0; i < totalItems; i++)
                 {
-                    queue.Dequeue();
+                    queue.DequeueAsync();
                 }
             }
             finally
@@ -113,7 +135,7 @@ namespace PersistedQueueBenchmarks
                 }
                 for (int i = 0; i < totalItems; i++)
                 {
-                    queue.Dequeue();
+                    queue.DequeueAsync();
                 }
             }
             finally
@@ -133,7 +155,7 @@ namespace PersistedQueueBenchmarks
             }
             for (int i = 0; i < totalItems; i++)
             {
-                queue.Dequeue();
+                queue.DequeueAsync();
             }
         }
 
@@ -147,7 +169,7 @@ namespace PersistedQueueBenchmarks
             }
             for (int i = 0; i < totalItems; i++)
             {
-                queue.Dequeue();
+                queue.DequeueAsync();
             }
         }
 

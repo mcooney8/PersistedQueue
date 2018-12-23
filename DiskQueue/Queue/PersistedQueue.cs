@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using PersistedQueue.Persistence;
 
 namespace PersistedQueue
@@ -12,7 +13,7 @@ namespace PersistedQueue
     {
         private readonly IPersistence<T> persistence;
         private readonly int maxItemsInMemory;
-        private readonly FixedArrayStack<T> inMemoryItems;
+        private readonly FixedArrayStack<Task<T>> inMemoryItems;
         private readonly object queueLock = new object();
 
         private uint nextKey;
@@ -33,7 +34,7 @@ namespace PersistedQueue
                 throw new ArgumentException("Must be greater than 0", nameof(maxItemsInMemory));
             }
             this.maxItemsInMemory = maxItemsInMemory;
-            this.inMemoryItems = new FixedArrayStack<T>(maxItemsInMemory);
+            this.inMemoryItems = new FixedArrayStack<Task<T>>(maxItemsInMemory);
             this.persistence = persistence;
             if (!deferLoad)
             {
@@ -56,10 +57,10 @@ namespace PersistedQueue
             lock (queueLock)
             {
                 nextKey++;
-                persistence.Persist(nextKey, item);
+                persistence.Persist(nextKey, item); // TODO: Make this async?
                 if (Count < maxItemsInMemory)
                 {
-                    inMemoryItems.Push(item);
+                    inMemoryItems.Push(Task.FromResult(item));
                 }
                 Count++;
             }
@@ -69,7 +70,7 @@ namespace PersistedQueue
         /// Removes the top item and returns it
         /// </summary>
         /// <returns>The dequeued item</returns>
-        public T Dequeue()
+        public Task<T> DequeueAsync()
         {
             lock (queueLock)
             {
@@ -78,13 +79,17 @@ namespace PersistedQueue
                     throw new InvalidOperationException("Cannot dequeue from an empty queue");
                 }
                 Count--;
-                T itemToDequeue = inMemoryItems.Pop();
-                persistence.Remove(firstKey++);
+                uint keyToRemove = firstKey++;
+                Task<T> dequeueTask = inMemoryItems.Pop();
+                dequeueTask.ContinueWith(task => persistence.Remove(keyToRemove));
                 if (inMemoryItems.Count < Count)
                 {
-                    LoadNextItem();
+                    uint keyToLoad = firstKey + (uint)inMemoryItems.Count;
+                    Task<T> loadTask = persistence.LoadAsync(keyToLoad);
+                    loadTask.ConfigureAwait(false);
+                    inMemoryItems.Push(loadTask);
                 }
-                return itemToDequeue;
+                return dequeueTask;
             }
         }
 
@@ -92,9 +97,9 @@ namespace PersistedQueue
         /// Returns the top item without removing it
         /// </summary>
         /// <returns>The peeked item</returns>
-        public T Peek()
+        public Task<T> PeekAsync()
         {
-            if (inMemoryItems.Count == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException("Cannot peek an empty queue");
             }
@@ -140,23 +145,14 @@ namespace PersistedQueue
 
         private IEnumerable<T> GetItems()
         {
-            foreach (T item in inMemoryItems)
+            foreach (Task<T> item in inMemoryItems)
             {
-                yield return item;
+                yield return item.GetAwaiter().GetResult();
             }
             for (uint key = (uint)inMemoryItems.Count + 1; key < Count; key++)
             {
                 yield return persistence.Load(key);
             }
-        }
-
-        private void LoadNextItem()
-        {
-            // TODO: Use background thread for this load operation and then add
-            // logic to make sure we wait for an item to be loaded before doing other operations
-            uint keyToLoad = firstKey + (uint)inMemoryItems.Count;
-            T newlyLoadedItem = persistence.Load(keyToLoad);
-            inMemoryItems.Push(newlyLoadedItem);
         }
     }
 }

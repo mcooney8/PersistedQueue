@@ -6,7 +6,7 @@ namespace PersistedQueue
 {
     internal class FixedArrayStack<T> : IEnumerable<T>
     {
-        private const int DefaultStartingSize = 1024;
+        private const int DefaultStartingSize = 512;
 
         private readonly int capacity;
         private T[] items;

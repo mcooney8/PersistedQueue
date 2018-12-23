@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersistedQueue.Persistence
 {
@@ -12,11 +13,18 @@ namespace PersistedQueue.Persistence
         IEnumerable<T> Load();
 
         /// <summary>
-        /// Load the specified key
+        /// Load an item with the specified key
         /// </summary>
         /// <returns>The loaded item</returns>
         /// <param name="key">The key to load</param>
         T Load(uint key);
+
+        /// <summary>
+        /// Loads an item with the specified key asynchronously
+        /// </summary>
+        /// <returns>The item load task</returns>
+        /// <param name="key">The key to load</param>
+        Task<T> LoadAsync(uint key);
 
         /// <summary>
         /// Persist the specified key and item.

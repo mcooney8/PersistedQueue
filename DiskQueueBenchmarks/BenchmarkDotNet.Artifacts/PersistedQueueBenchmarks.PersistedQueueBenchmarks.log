@@ -1,23 +1,18 @@
 // Validating benchmarks:
 // ***** BenchmarkRunner: Start   *****
 // ***** Building 1 exe(s) in Parallel: Start   *****
-// start dotnet restore  /p:UseSharedCompilation=false in /Users/Michael/Projects/DiskQueue/DiskQueueBenchmarks/bin/Release/netcoreapp2.1/1e350bd4-5167-4530-b4a1-fbde2e686283
-// command took 2.21s and exited with 0
-// start dotnet build -c Release  /p:UseSharedCompilation=false in /Users/Michael/Projects/DiskQueue/DiskQueueBenchmarks/bin/Release/netcoreapp2.1/1e350bd4-5167-4530-b4a1-fbde2e686283
-// command took 4.5s and exited with 0
-// ***** Done, took 00:00:07 (7.07 sec)   *****
+// start dotnet restore  /p:UseSharedCompilation=false in /Users/Michael/Projects/DiskQueue/DiskQueueBenchmarks/bin/Release/netcoreapp2.1/c3c08bde-02c5-4675-9405-e585c615b055
+// command took 1.76s and exited with 0
+// start dotnet build -c Release  /p:UseSharedCompilation=false in /Users/Michael/Projects/DiskQueue/DiskQueueBenchmarks/bin/Release/netcoreapp2.1/c3c08bde-02c5-4675-9405-e585c615b055
+// command took 4.95s and exited with 0
+// ***** Done, took 00:00:07 (7.06 sec)   *****
 // Found benchmarks:
-//   PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=False]
-//   PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=False]
-//   PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=True]
-//   PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=True]
-//   PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=False]
-//   PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=False]
-//   PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=True]
-//   PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=True]
+//   PersistedQueueBenchmarks.PersistentQueueSqliteFilePersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+//   PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+//   PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
 
 // **************************
-// Benchmark: PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=False]
+// Benchmark: PersistedQueueBenchmarks.PersistentQueueSqliteFilePersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
 // *** Execute ***
 // Launch: 1 / 1
 Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
@@ -28,103 +23,29 @@ Failed to set up high priority. Make sure you have the right permissions. Messag
 // GC=Concurrent Workstation
 // Job: DefaultJob
 
-OverheadJitting  1: 1 op, 342000.00 ns, 342.0000 us/op
-WorkloadJitting  1: 1 op, 7916000.00 ns, 7.9160 ms/op
+OverheadJitting  1: 1 op, 385000.00 ns, 385.0000 us/op
 
-OverheadJitting  2: 16 op, 396000.00 ns, 24.7500 us/op
-WorkloadJitting  2: 16 op, 540000.00 ns, 33.7500 us/op
-
-WorkloadPilot    1: 16 op, 148000.00 ns, 9.2500 us/op
-WorkloadPilot    2: 32 op, 343000.00 ns, 10.7188 us/op
-WorkloadPilot    3: 64 op, 754000.00 ns, 11.7813 us/op
-WorkloadPilot    4: 128 op, 1483000.00 ns, 11.5859 us/op
-WorkloadPilot    5: 256 op, 3085000.00 ns, 12.0508 us/op
-WorkloadPilot    6: 512 op, 6022000.00 ns, 11.7617 us/op
-WorkloadPilot    7: 1024 op, 9968000.00 ns, 9.7344 us/op
-WorkloadPilot    8: 2048 op, 18127000.00 ns, 8.8511 us/op
-WorkloadPilot    9: 4096 op, 37592000.00 ns, 9.1777 us/op
-WorkloadPilot   10: 8192 op, 72122000.00 ns, 8.8040 us/op
-WorkloadPilot   11: 16384 op, 145382000.00 ns, 8.8734 us/op
-WorkloadPilot   12: 32768 op, 292392000.00 ns, 8.9231 us/op
-WorkloadPilot   13: 65536 op, 567137000.00 ns, 8.6538 us/op
-
-OverheadWarmup   1: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadWarmup   2: 65536 op, 105000.00 ns, 1.6022 ns/op
-OverheadWarmup   3: 65536 op, 104000.00 ns, 1.5869 ns/op
-OverheadWarmup   4: 65536 op, 105000.00 ns, 1.6022 ns/op
-OverheadWarmup   5: 65536 op, 105000.00 ns, 1.6022 ns/op
-OverheadWarmup   6: 65536 op, 105000.00 ns, 1.6022 ns/op
-OverheadWarmup   7: 65536 op, 105000.00 ns, 1.6022 ns/op
-
-OverheadActual   1: 65536 op, 105000.00 ns, 1.6022 ns/op
-OverheadActual   2: 65536 op, 126000.00 ns, 1.9226 ns/op
-OverheadActual   3: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual   4: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual   5: 65536 op, 109000.00 ns, 1.6632 ns/op
-OverheadActual   6: 65536 op, 128000.00 ns, 1.9531 ns/op
-OverheadActual   7: 65536 op, 117000.00 ns, 1.7853 ns/op
-OverheadActual   8: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual   9: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual  10: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual  11: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual  12: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual  13: 65536 op, 108000.00 ns, 1.6479 ns/op
-OverheadActual  14: 65536 op, 115000.00 ns, 1.7548 ns/op
-OverheadActual  15: 65536 op, 115000.00 ns, 1.7548 ns/op
-
-WorkloadWarmup   1: 65536 op, 569018000.00 ns, 8.6825 us/op
-WorkloadWarmup   2: 65536 op, 569472000.00 ns, 8.6895 us/op
-WorkloadWarmup   3: 65536 op, 575393000.00 ns, 8.7798 us/op
-WorkloadWarmup   4: 65536 op, 567215000.00 ns, 8.6550 us/op
-WorkloadWarmup   5: 65536 op, 562841000.00 ns, 8.5883 us/op
-WorkloadWarmup   6: 65536 op, 581009000.00 ns, 8.8655 us/op
-WorkloadWarmup   7: 65536 op, 582135000.00 ns, 8.8827 us/op
-WorkloadWarmup   8: 65536 op, 575955000.00 ns, 8.7884 us/op
-
-// BeforeActualRun
-WorkloadActual   1: 65536 op, 566211000.00 ns, 8.6397 us/op
-WorkloadActual   2: 65536 op, 566639000.00 ns, 8.6462 us/op
-WorkloadActual   3: 65536 op, 567257000.00 ns, 8.6557 us/op
-WorkloadActual   4: 65536 op, 566361000.00 ns, 8.6420 us/op
-WorkloadActual   5: 65536 op, 568719000.00 ns, 8.6780 us/op
-WorkloadActual   6: 65536 op, 564529000.00 ns, 8.6140 us/op
-WorkloadActual   7: 65536 op, 565636000.00 ns, 8.6309 us/op
-WorkloadActual   8: 65536 op, 565956000.00 ns, 8.6358 us/op
-WorkloadActual   9: 65536 op, 567890000.00 ns, 8.6653 us/op
-WorkloadActual  10: 65536 op, 565955000.00 ns, 8.6358 us/op
-WorkloadActual  11: 65536 op, 566119000.00 ns, 8.6383 us/op
-WorkloadActual  12: 65536 op, 565064000.00 ns, 8.6222 us/op
-WorkloadActual  13: 65536 op, 573643000.00 ns, 8.7531 us/op
-WorkloadActual  14: 65536 op, 565990000.00 ns, 8.6363 us/op
-WorkloadActual  15: 65536 op, 570137000.00 ns, 8.6996 us/op
-
-// AfterActualRun
-WorkloadResult   1: 65536 op, 566099066.67 ns, 8.6380 us/op
-WorkloadResult   2: 65536 op, 566527066.67 ns, 8.6445 us/op
-WorkloadResult   3: 65536 op, 567145066.67 ns, 8.6539 us/op
-WorkloadResult   4: 65536 op, 566249066.67 ns, 8.6403 us/op
-WorkloadResult   5: 65536 op, 568607066.67 ns, 8.6763 us/op
-WorkloadResult   6: 65536 op, 564417066.67 ns, 8.6123 us/op
-WorkloadResult   7: 65536 op, 565524066.67 ns, 8.6292 us/op
-WorkloadResult   8: 65536 op, 565844066.67 ns, 8.6341 us/op
-WorkloadResult   9: 65536 op, 567778066.67 ns, 8.6636 us/op
-WorkloadResult  10: 65536 op, 565843066.67 ns, 8.6341 us/op
-WorkloadResult  11: 65536 op, 566007066.67 ns, 8.6366 us/op
-WorkloadResult  12: 65536 op, 564952066.67 ns, 8.6205 us/op
-WorkloadResult  13: 65536 op, 565878066.67 ns, 8.6346 us/op
-WorkloadResult  14: 65536 op, 570025066.67 ns, 8.6979 us/op
-GC:  121 3 0 763363328 65536
-
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.DllNotFoundException: Unable to load shared library 'sqlite3.dll' or one of its dependencies. In order to help diagnose loading problems, consider setting the DYLD_PRINT_LIBRARIES environment variable: dlopen(libsqlite3.dll, 1): image not found
+   at Sqlite.Fast.Sqlite.Open(String filename, IntPtr& conn)
+   at Sqlite.Fast.Connection..ctor(String dbFilePath)
+   at PersistedQueue.Sqlite.SqlitePersistence`1..ctor(String dbFilePath)
+   at PersistedQueueBenchmarks.PersistedQueueBenchmarks.PersistentQueueSqliteFilePersistence()
+   at BenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionNoUnroll(Int64 invokeCount) in /Users/Michael/Projects/DiskQueue/DiskQueueBenchmarks/bin/Release/netcoreapp2.1/c3c08bde-02c5-4675-9405-e585c615b055/c3c08bde-02c5-4675-9405-e585c615b055.notcs:line 730
+   at BenchmarkDotNet.Engines.Engine.RunIteration(IterationData data)
+   at BenchmarkDotNet.Engines.EngineFactory.Jit(Engine engine, Int32 jitIndex, Int32 invokeCount, Int32 unrollFactor)
+   at BenchmarkDotNet.Engines.EngineFactory.CreateReadyToRun(EngineParameters engineParameters)
+   at BenchmarkDotNet.Autogenerated.Runnable_0.Run(IHost host, String benchmarkName) in /Users/Michael/Projects/DiskQueue/DiskQueueBenchmarks/bin/Release/netcoreapp2.1/c3c08bde-02c5-4675-9405-e585c615b055/c3c08bde-02c5-4675-9405-e585c615b055.notcs:line 147
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(String[] args) in /Users/Michael/Projects/DiskQueue/DiskQueueBenchmarks/bin/Release/netcoreapp2.1/c3c08bde-02c5-4675-9405-e585c615b055/c3c08bde-02c5-4675-9405-e585c615b055.notcs:line 62
 // AfterAll
+ExitCode != 0
+No more Benchmark runs will be launched as NO measurements were obtained from the previous run!
 
-Mean = 8.6440 us, StdErr = 0.0060 us (0.07%); N = 14, StdDev = 0.0225 us
-Min = 8.6123 us, Q1 = 8.6341 us, Median = 8.6373 us, Q3 = 8.6539 us, Max = 8.6979 us
-IQR = 0.0199 us, LowerFence = 8.6043 us, UpperFence = 8.6837 us
-ConfidenceInterval = [8.6186 us; 8.6694 us] (CI 99.9%), Margin = 0.0254 us (0.29% of Mean)
-Skewness = 0.92, Kurtosis = 3.07, MValue = 2
 
 // **************************
-// Benchmark: PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=False]
+// Benchmark: PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
 // *** Execute ***
 // Launch: 1 / 1
 Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
@@ -135,641 +56,33 @@ Failed to set up high priority. Make sure you have the right permissions. Messag
 // GC=Concurrent Workstation
 // Job: DefaultJob
 
-OverheadJitting  1: 1 op, 339000.00 ns, 339.0000 us/op
-WorkloadJitting  1: 1 op, 1820000.00 ns, 1.8200 ms/op
+OverheadJitting  1: 1 op, 324000.00 ns, 324.0000 us/op
+WorkloadJitting  1: 1 op, 58140000.00 ns, 58.1400 ms/op
 
-OverheadJitting  2: 16 op, 344000.00 ns, 21.5000 us/op
-WorkloadJitting  2: 16 op, 323000.00 ns, 20.1875 us/op
+WorkloadPilot    1: 2 op, 84171000.00 ns, 42.0855 ms/op
+WorkloadPilot    2: 3 op, 125767000.00 ns, 41.9223 ms/op
+WorkloadPilot    3: 4 op, 165680000.00 ns, 41.4200 ms/op
+WorkloadPilot    4: 5 op, 210687000.00 ns, 42.1374 ms/op
+WorkloadPilot    5: 6 op, 250398000.00 ns, 41.7330 ms/op
+WorkloadPilot    6: 7 op, 292240000.00 ns, 41.7486 ms/op
+WorkloadPilot    7: 8 op, 339446000.00 ns, 42.4308 ms/op
+WorkloadPilot    8: 9 op, 385930000.00 ns, 42.8811 ms/op
+WorkloadPilot    9: 10 op, 419112000.00 ns, 41.9112 ms/op
+WorkloadPilot   10: 11 op, 462687000.00 ns, 42.0625 ms/op
+WorkloadPilot   11: 12 op, 497752000.00 ns, 41.4793 ms/op
+ExitCode != 0
+No more Benchmark runs will be launched as NO measurements were obtained from the previous run!
 
-WorkloadPilot    1: 16 op, 17000.00 ns, 1.0625 us/op
-WorkloadPilot    2: 32 op, 33000.00 ns, 1.0313 us/op
-WorkloadPilot    3: 64 op, 65000.00 ns, 1.0156 us/op
-WorkloadPilot    4: 128 op, 120000.00 ns, 937.5000 ns/op
-WorkloadPilot    5: 256 op, 276000.00 ns, 1.0781 us/op
-WorkloadPilot    6: 512 op, 637000.00 ns, 1.2441 us/op
-WorkloadPilot    7: 1024 op, 1186000.00 ns, 1.1582 us/op
-WorkloadPilot    8: 2048 op, 2533000.00 ns, 1.2368 us/op
-WorkloadPilot    9: 4096 op, 5781000.00 ns, 1.4114 us/op
-WorkloadPilot   10: 8192 op, 8107000.00 ns, 989.6240 ns/op
-WorkloadPilot   11: 16384 op, 14624000.00 ns, 892.5781 ns/op
-WorkloadPilot   12: 32768 op, 30148000.00 ns, 920.0439 ns/op
-WorkloadPilot   13: 65536 op, 58889000.00 ns, 898.5748 ns/op
-WorkloadPilot   14: 131072 op, 122569000.00 ns, 935.1273 ns/op
-WorkloadPilot   15: 262144 op, 229265000.00 ns, 874.5766 ns/op
-WorkloadPilot   16: 524288 op, 456310000.00 ns, 870.3423 ns/op
-WorkloadPilot   17: 1048576 op, 936334000.00 ns, 892.9577 ns/op
-
-OverheadWarmup   1: 1048576 op, 1637000.00 ns, 1.5612 ns/op
-OverheadWarmup   2: 1048576 op, 1897000.00 ns, 1.8091 ns/op
-OverheadWarmup   3: 1048576 op, 1823000.00 ns, 1.7385 ns/op
-OverheadWarmup   4: 1048576 op, 1925000.00 ns, 1.8358 ns/op
-OverheadWarmup   5: 1048576 op, 1758000.00 ns, 1.6766 ns/op
-OverheadWarmup   6: 1048576 op, 1720000.00 ns, 1.6403 ns/op
-
-OverheadActual   1: 1048576 op, 1642000.00 ns, 1.5659 ns/op
-OverheadActual   2: 1048576 op, 1801000.00 ns, 1.7176 ns/op
-OverheadActual   3: 1048576 op, 1860000.00 ns, 1.7738 ns/op
-OverheadActual   4: 1048576 op, 1848000.00 ns, 1.7624 ns/op
-OverheadActual   5: 1048576 op, 1845000.00 ns, 1.7595 ns/op
-OverheadActual   6: 1048576 op, 1832000.00 ns, 1.7471 ns/op
-OverheadActual   7: 1048576 op, 1761000.00 ns, 1.6794 ns/op
-OverheadActual   8: 1048576 op, 1807000.00 ns, 1.7233 ns/op
-OverheadActual   9: 1048576 op, 1836000.00 ns, 1.7509 ns/op
-OverheadActual  10: 1048576 op, 1750000.00 ns, 1.6689 ns/op
-OverheadActual  11: 1048576 op, 1916000.00 ns, 1.8272 ns/op
-OverheadActual  12: 1048576 op, 1832000.00 ns, 1.7471 ns/op
-OverheadActual  13: 1048576 op, 1800000.00 ns, 1.7166 ns/op
-OverheadActual  14: 1048576 op, 1804000.00 ns, 1.7204 ns/op
-OverheadActual  15: 1048576 op, 1679000.00 ns, 1.6012 ns/op
-
-WorkloadWarmup   1: 1048576 op, 941537000.00 ns, 897.9197 ns/op
-WorkloadWarmup   2: 1048576 op, 927027000.00 ns, 884.0818 ns/op
-WorkloadWarmup   3: 1048576 op, 938508000.00 ns, 895.0310 ns/op
-WorkloadWarmup   4: 1048576 op, 926423000.00 ns, 883.5058 ns/op
-WorkloadWarmup   5: 1048576 op, 926505000.00 ns, 883.5840 ns/op
-WorkloadWarmup   6: 1048576 op, 925502000.00 ns, 882.6275 ns/op
-
-// BeforeActualRun
-WorkloadActual   1: 1048576 op, 918058000.00 ns, 875.5283 ns/op
-WorkloadActual   2: 1048576 op, 910182000.00 ns, 868.0172 ns/op
-WorkloadActual   3: 1048576 op, 927281000.00 ns, 884.3241 ns/op
-WorkloadActual   4: 1048576 op, 935031000.00 ns, 891.7150 ns/op
-WorkloadActual   5: 1048576 op, 919947000.00 ns, 877.3298 ns/op
-WorkloadActual   6: 1048576 op, 925987000.00 ns, 883.0900 ns/op
-WorkloadActual   7: 1048576 op, 916643000.00 ns, 874.1789 ns/op
-WorkloadActual   8: 1048576 op, 927184000.00 ns, 884.2316 ns/op
-WorkloadActual   9: 1048576 op, 931615000.00 ns, 888.4573 ns/op
-WorkloadActual  10: 1048576 op, 936939000.00 ns, 893.5347 ns/op
-WorkloadActual  11: 1048576 op, 950202000.00 ns, 906.1832 ns/op
-WorkloadActual  12: 1048576 op, 939751000.00 ns, 896.2164 ns/op
-WorkloadActual  13: 1048576 op, 981170000.00 ns, 935.7166 ns/op
-WorkloadActual  14: 1048576 op, 998377000.00 ns, 952.1265 ns/op
-WorkloadActual  15: 1048576 op, 995552000.00 ns, 949.4324 ns/op
-WorkloadActual  16: 1048576 op, 938591000.00 ns, 895.1101 ns/op
-
-// AfterActualRun
-WorkloadResult   1: 1048576 op, 916257133.33 ns, 873.8109 ns/op
-WorkloadResult   2: 1048576 op, 908381133.33 ns, 866.2998 ns/op
-WorkloadResult   3: 1048576 op, 925480133.33 ns, 882.6066 ns/op
-WorkloadResult   4: 1048576 op, 933230133.33 ns, 889.9976 ns/op
-WorkloadResult   5: 1048576 op, 918146133.33 ns, 875.6124 ns/op
-WorkloadResult   6: 1048576 op, 924186133.33 ns, 881.3726 ns/op
-WorkloadResult   7: 1048576 op, 914842133.33 ns, 872.4614 ns/op
-WorkloadResult   8: 1048576 op, 925383133.33 ns, 882.5141 ns/op
-WorkloadResult   9: 1048576 op, 929814133.33 ns, 886.7399 ns/op
-WorkloadResult  10: 1048576 op, 935138133.33 ns, 891.8172 ns/op
-WorkloadResult  11: 1048576 op, 948401133.33 ns, 904.4658 ns/op
-WorkloadResult  12: 1048576 op, 937950133.33 ns, 894.4990 ns/op
-WorkloadResult  13: 1048576 op, 936790133.33 ns, 893.3927 ns/op
-GC:  199 0 0 1258291200 1048576
-
-// AfterAll
-
-Mean = 884.2762 ns, StdErr = 2.9445 ns (0.33%); N = 13, StdDev = 10.6166 ns
-Min = 866.2998 ns, Q1 = 874.7116 ns, Median = 882.6066 ns, Q3 = 892.6050 ns, Max = 904.4658 ns
-IQR = 17.8933 ns, LowerFence = 847.8717 ns, UpperFence = 919.4449 ns
-ConfidenceInterval = [871.5623 ns; 896.9900 ns] (CI 99.9%), Margin = 12.7138 ns (1.44% of Mean)
-Skewness = 0.09, Kurtosis = 2, MValue = 2
 
 // **************************
-// Benchmark: PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=True]
+// Benchmark: PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
 // *** Execute ***
 // Launch: 1 / 1
 Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
-// BeforeAnythingElse
+Process dotnet.exe (Id:13166) is still running, will now be killed
+ExitCode != 0
+No more Benchmark runs will be launched as NO measurements were obtained from the previous run!
 
-// Benchmark Process Environment Information:
-// Runtime=.NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
-// GC=Concurrent Workstation
-// Job: DefaultJob
-
-OverheadJitting  1: 1 op, 338000.00 ns, 338.0000 us/op
-WorkloadJitting  1: 1 op, 9645000.00 ns, 9.6450 ms/op
-
-OverheadJitting  2: 16 op, 298000.00 ns, 18.6250 us/op
-WorkloadJitting  2: 16 op, 64919000.00 ns, 4.0574 ms/op
-
-WorkloadPilot    1: 16 op, 63145000.00 ns, 3.9466 ms/op
-WorkloadPilot    2: 32 op, 122169000.00 ns, 3.8178 ms/op
-WorkloadPilot    3: 64 op, 254771000.00 ns, 3.9808 ms/op
-WorkloadPilot    4: 128 op, 496705000.00 ns, 3.8805 ms/op
-WorkloadPilot    5: 256 op, 984285000.00 ns, 3.8449 ms/op
-
-OverheadWarmup   1: 256 op, 3000.00 ns, 11.7188 ns/op
-OverheadWarmup   2: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadWarmup   3: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadWarmup   4: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadWarmup   5: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadWarmup   6: 256 op, 1000.00 ns, 3.9063 ns/op
-
-OverheadActual   1: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   2: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual   3: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual   4: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   5: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   6: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   7: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   8: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   9: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  10: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  11: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  12: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual  13: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  14: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  15: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual  16: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  17: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual  18: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual  19: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  20: 256 op, 0.00 ns, 0.0000 ns/op
-
-WorkloadWarmup   1: 256 op, 984082000.00 ns, 3.8441 ms/op
-WorkloadWarmup   2: 256 op, 977743000.00 ns, 3.8193 ms/op
-WorkloadWarmup   3: 256 op, 989977000.00 ns, 3.8671 ms/op
-WorkloadWarmup   4: 256 op, 984470000.00 ns, 3.8456 ms/op
-WorkloadWarmup   5: 256 op, 981552000.00 ns, 3.8342 ms/op
-WorkloadWarmup   6: 256 op, 987755000.00 ns, 3.8584 ms/op
-WorkloadWarmup   7: 256 op, 982131000.00 ns, 3.8364 ms/op
-
-// BeforeActualRun
-WorkloadActual   1: 256 op, 980982000.00 ns, 3.8320 ms/op
-WorkloadActual   2: 256 op, 979905000.00 ns, 3.8278 ms/op
-WorkloadActual   3: 256 op, 980763000.00 ns, 3.8311 ms/op
-WorkloadActual   4: 256 op, 994291000.00 ns, 3.8839 ms/op
-WorkloadActual   5: 256 op, 995364000.00 ns, 3.8881 ms/op
-WorkloadActual   6: 256 op, 978280000.00 ns, 3.8214 ms/op
-WorkloadActual   7: 256 op, 984104000.00 ns, 3.8442 ms/op
-WorkloadActual   8: 256 op, 981612000.00 ns, 3.8344 ms/op
-WorkloadActual   9: 256 op, 986668000.00 ns, 3.8542 ms/op
-WorkloadActual  10: 256 op, 979202000.00 ns, 3.8250 ms/op
-WorkloadActual  11: 256 op, 981472000.00 ns, 3.8339 ms/op
-WorkloadActual  12: 256 op, 979085000.00 ns, 3.8246 ms/op
-WorkloadActual  13: 256 op, 978847000.00 ns, 3.8236 ms/op
-WorkloadActual  14: 256 op, 984225000.00 ns, 3.8446 ms/op
-WorkloadActual  15: 256 op, 978633000.00 ns, 3.8228 ms/op
-
-// AfterActualRun
-WorkloadResult   1: 256 op, 980981350.00 ns, 3.8320 ms/op
-WorkloadResult   2: 256 op, 979904350.00 ns, 3.8278 ms/op
-WorkloadResult   3: 256 op, 980762350.00 ns, 3.8311 ms/op
-WorkloadResult   4: 256 op, 978279350.00 ns, 3.8214 ms/op
-WorkloadResult   5: 256 op, 984103350.00 ns, 3.8442 ms/op
-WorkloadResult   6: 256 op, 981611350.00 ns, 3.8344 ms/op
-WorkloadResult   7: 256 op, 986667350.00 ns, 3.8542 ms/op
-WorkloadResult   8: 256 op, 979201350.00 ns, 3.8250 ms/op
-WorkloadResult   9: 256 op, 981471350.00 ns, 3.8339 ms/op
-WorkloadResult  10: 256 op, 979084350.00 ns, 3.8245 ms/op
-WorkloadResult  11: 256 op, 978846350.00 ns, 3.8236 ms/op
-WorkloadResult  12: 256 op, 984224350.00 ns, 3.8446 ms/op
-WorkloadResult  13: 256 op, 978632350.00 ns, 3.8228 ms/op
-GC:  31 14 0 199897088 256
-
-// AfterAll
-
-Mean = 3.8323 ms, StdErr = 0.0028 ms (0.07%); N = 13, StdDev = 0.0100 ms
-Min = 3.8214 ms, Q1 = 3.8241 ms, Median = 3.8311 ms, Q3 = 3.8393 ms, Max = 3.8542 ms
-IQR = 0.0152 ms, LowerFence = 3.8013 ms, UpperFence = 3.8621 ms
-ConfidenceInterval = [3.8203 ms; 3.8442 ms] (CI 99.9%), Margin = 0.0120 ms (0.31% of Mean)
-Skewness = 0.8, Kurtosis = 2.38, MValue = 2
-
-// **************************
-// Benchmark: PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=True]
-// *** Execute ***
-// Launch: 1 / 1
-Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
-// BeforeAnythingElse
-
-// Benchmark Process Environment Information:
-// Runtime=.NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
-// GC=Concurrent Workstation
-// Job: DefaultJob
-
-OverheadJitting  1: 1 op, 372000.00 ns, 372.0000 us/op
-WorkloadJitting  1: 1 op, 5147000.00 ns, 5.1470 ms/op
-
-OverheadJitting  2: 16 op, 300000.00 ns, 18.7500 us/op
-WorkloadJitting  2: 16 op, 64531000.00 ns, 4.0332 ms/op
-
-WorkloadPilot    1: 16 op, 62015000.00 ns, 3.8759 ms/op
-WorkloadPilot    2: 32 op, 123626000.00 ns, 3.8633 ms/op
-WorkloadPilot    3: 64 op, 243366000.00 ns, 3.8026 ms/op
-WorkloadPilot    4: 128 op, 488226000.00 ns, 3.8143 ms/op
-WorkloadPilot    5: 256 op, 976060000.00 ns, 3.8127 ms/op
-
-OverheadWarmup   1: 256 op, 4000.00 ns, 15.6250 ns/op
-OverheadWarmup   2: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadWarmup   3: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadWarmup   4: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadWarmup   5: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadWarmup   6: 256 op, 1000.00 ns, 3.9063 ns/op
-
-OverheadActual   1: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual   2: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual   3: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual   4: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   5: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   6: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   7: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   8: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual   9: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  10: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  11: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  12: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  13: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  14: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  15: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  16: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual  17: 256 op, 1000.00 ns, 3.9063 ns/op
-OverheadActual  18: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual  19: 256 op, 0.00 ns, 0.0000 ns/op
-OverheadActual  20: 256 op, 1000.00 ns, 3.9063 ns/op
-
-WorkloadWarmup   1: 256 op, 975427000.00 ns, 3.8103 ms/op
-WorkloadWarmup   2: 256 op, 976205000.00 ns, 3.8133 ms/op
-WorkloadWarmup   3: 256 op, 972008000.00 ns, 3.7969 ms/op
-WorkloadWarmup   4: 256 op, 972041000.00 ns, 3.7970 ms/op
-WorkloadWarmup   5: 256 op, 977051000.00 ns, 3.8166 ms/op
-WorkloadWarmup   6: 256 op, 974326000.00 ns, 3.8060 ms/op
-
-// BeforeActualRun
-WorkloadActual   1: 256 op, 975580000.00 ns, 3.8109 ms/op
-WorkloadActual   2: 256 op, 972734000.00 ns, 3.7997 ms/op
-WorkloadActual   3: 256 op, 977246000.00 ns, 3.8174 ms/op
-WorkloadActual   4: 256 op, 977614000.00 ns, 3.8188 ms/op
-WorkloadActual   5: 256 op, 985263000.00 ns, 3.8487 ms/op
-WorkloadActual   6: 256 op, 1001012000.00 ns, 3.9102 ms/op
-WorkloadActual   7: 256 op, 984084000.00 ns, 3.8441 ms/op
-WorkloadActual   8: 256 op, 985665000.00 ns, 3.8503 ms/op
-WorkloadActual   9: 256 op, 971592000.00 ns, 3.7953 ms/op
-WorkloadActual  10: 256 op, 975459000.00 ns, 3.8104 ms/op
-WorkloadActual  11: 256 op, 980848000.00 ns, 3.8314 ms/op
-WorkloadActual  12: 256 op, 977816000.00 ns, 3.8196 ms/op
-WorkloadActual  13: 256 op, 973864000.00 ns, 3.8042 ms/op
-WorkloadActual  14: 256 op, 974848000.00 ns, 3.8080 ms/op
-WorkloadActual  15: 256 op, 976992000.00 ns, 3.8164 ms/op
-
-// AfterActualRun
-WorkloadResult   1: 256 op, 975579300.00 ns, 3.8109 ms/op
-WorkloadResult   2: 256 op, 972733300.00 ns, 3.7997 ms/op
-WorkloadResult   3: 256 op, 977245300.00 ns, 3.8174 ms/op
-WorkloadResult   4: 256 op, 977613300.00 ns, 3.8188 ms/op
-WorkloadResult   5: 256 op, 985262300.00 ns, 3.8487 ms/op
-WorkloadResult   6: 256 op, 984083300.00 ns, 3.8441 ms/op
-WorkloadResult   7: 256 op, 985664300.00 ns, 3.8503 ms/op
-WorkloadResult   8: 256 op, 971591300.00 ns, 3.7953 ms/op
-WorkloadResult   9: 256 op, 975458300.00 ns, 3.8104 ms/op
-WorkloadResult  10: 256 op, 980847300.00 ns, 3.8314 ms/op
-WorkloadResult  11: 256 op, 977815300.00 ns, 3.8196 ms/op
-WorkloadResult  12: 256 op, 973863300.00 ns, 3.8042 ms/op
-WorkloadResult  13: 256 op, 974847300.00 ns, 3.8080 ms/op
-WorkloadResult  14: 256 op, 976991300.00 ns, 3.8164 ms/op
-GC:  31 12 0 195739648 256
-
-// AfterAll
-
-Mean = 3.8196 ms, StdErr = 0.0047 ms (0.12%); N = 14, StdDev = 0.0177 ms
-Min = 3.7953 ms, Q1 = 3.8080 ms, Median = 3.8169 ms, Q3 = 3.8314 ms, Max = 3.8503 ms
-IQR = 0.0234 ms, LowerFence = 3.7728 ms, UpperFence = 3.8666 ms
-ConfidenceInterval = [3.7997 ms; 3.8396 ms] (CI 99.9%), Margin = 0.0199 ms (0.52% of Mean)
-Skewness = 0.52, Kurtosis = 1.88, MValue = 2
-
-// **************************
-// Benchmark: PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=False]
-// *** Execute ***
-// Launch: 1 / 1
-Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
-// BeforeAnythingElse
-
-// Benchmark Process Environment Information:
-// Runtime=.NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
-// GC=Concurrent Workstation
-// Job: DefaultJob
-
-OverheadJitting  1: 1 op, 371000.00 ns, 371.0000 us/op
-WorkloadJitting  1: 1 op, 10204000.00 ns, 10.2040 ms/op
-
-OverheadJitting  2: 16 op, 327000.00 ns, 20.4375 us/op
-WorkloadJitting  2: 16 op, 16690000.00 ns, 1.0431 ms/op
-
-WorkloadPilot    1: 16 op, 16661000.00 ns, 1.0413 ms/op
-WorkloadPilot    2: 32 op, 32012000.00 ns, 1.0004 ms/op
-WorkloadPilot    3: 64 op, 65506000.00 ns, 1.0235 ms/op
-WorkloadPilot    4: 128 op, 132011000.00 ns, 1.0313 ms/op
-WorkloadPilot    5: 256 op, 261541000.00 ns, 1.0216 ms/op
-WorkloadPilot    6: 512 op, 522626000.00 ns, 1.0208 ms/op
-
-OverheadWarmup   1: 512 op, 5000.00 ns, 9.7656 ns/op
-OverheadWarmup   2: 512 op, 2000.00 ns, 3.9063 ns/op
-OverheadWarmup   3: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadWarmup   4: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadWarmup   5: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadWarmup   6: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadWarmup   7: 512 op, 1000.00 ns, 1.9531 ns/op
-
-OverheadActual   1: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual   2: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual   3: 512 op, 2000.00 ns, 3.9063 ns/op
-OverheadActual   4: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual   5: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual   6: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual   7: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual   8: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual   9: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual  10: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual  11: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual  12: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual  13: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual  14: 512 op, 1000.00 ns, 1.9531 ns/op
-OverheadActual  15: 512 op, 1000.00 ns, 1.9531 ns/op
-
-WorkloadWarmup   1: 512 op, 525629000.00 ns, 1.0266 ms/op
-WorkloadWarmup   2: 512 op, 524768000.00 ns, 1.0249 ms/op
-WorkloadWarmup   3: 512 op, 527184000.00 ns, 1.0297 ms/op
-WorkloadWarmup   4: 512 op, 521992000.00 ns, 1.0195 ms/op
-WorkloadWarmup   5: 512 op, 527037000.00 ns, 1.0294 ms/op
-WorkloadWarmup   6: 512 op, 525996000.00 ns, 1.0273 ms/op
-
-// BeforeActualRun
-WorkloadActual   1: 512 op, 524565000.00 ns, 1.0245 ms/op
-WorkloadActual   2: 512 op, 520733000.00 ns, 1.0171 ms/op
-WorkloadActual   3: 512 op, 524361000.00 ns, 1.0241 ms/op
-WorkloadActual   4: 512 op, 519736000.00 ns, 1.0151 ms/op
-WorkloadActual   5: 512 op, 524663000.00 ns, 1.0247 ms/op
-WorkloadActual   6: 512 op, 521962000.00 ns, 1.0195 ms/op
-WorkloadActual   7: 512 op, 525858000.00 ns, 1.0271 ms/op
-WorkloadActual   8: 512 op, 525974000.00 ns, 1.0273 ms/op
-WorkloadActual   9: 512 op, 522348000.00 ns, 1.0202 ms/op
-WorkloadActual  10: 512 op, 526580000.00 ns, 1.0285 ms/op
-WorkloadActual  11: 512 op, 524774000.00 ns, 1.0249 ms/op
-WorkloadActual  12: 512 op, 521944000.00 ns, 1.0194 ms/op
-WorkloadActual  13: 512 op, 522517000.00 ns, 1.0205 ms/op
-WorkloadActual  14: 512 op, 525590000.00 ns, 1.0265 ms/op
-WorkloadActual  15: 512 op, 524441000.00 ns, 1.0243 ms/op
-
-// AfterActualRun
-WorkloadResult   1: 512 op, 524563933.33 ns, 1.0245 ms/op
-WorkloadResult   2: 512 op, 520731933.33 ns, 1.0171 ms/op
-WorkloadResult   3: 512 op, 524359933.33 ns, 1.0241 ms/op
-WorkloadResult   4: 512 op, 519734933.33 ns, 1.0151 ms/op
-WorkloadResult   5: 512 op, 524661933.33 ns, 1.0247 ms/op
-WorkloadResult   6: 512 op, 521960933.33 ns, 1.0195 ms/op
-WorkloadResult   7: 512 op, 525856933.33 ns, 1.0271 ms/op
-WorkloadResult   8: 512 op, 525972933.33 ns, 1.0273 ms/op
-WorkloadResult   9: 512 op, 522346933.33 ns, 1.0202 ms/op
-WorkloadResult  10: 512 op, 526578933.33 ns, 1.0285 ms/op
-WorkloadResult  11: 512 op, 524772933.33 ns, 1.0249 ms/op
-WorkloadResult  12: 512 op, 521942933.33 ns, 1.0194 ms/op
-WorkloadResult  13: 512 op, 522515933.33 ns, 1.0205 ms/op
-WorkloadResult  14: 512 op, 525588933.33 ns, 1.0265 ms/op
-WorkloadResult  15: 512 op, 524439933.33 ns, 1.0243 ms/op
-GC:  63 63 63 346787840 512
-
-// AfterAll
-
-Mean = 1.0229 ms, StdErr = 0.0010 ms (0.10%); N = 15, StdDev = 0.0040 ms
-Min = 1.0151 ms, Q1 = 1.0195 ms, Median = 1.0243 ms, Q3 = 1.0265 ms, Max = 1.0285 ms
-IQR = 0.0071 ms, LowerFence = 1.0088 ms, UpperFence = 1.0372 ms
-ConfidenceInterval = [1.0186 ms; 1.0272 ms] (CI 99.9%), Margin = 0.0043 ms (0.42% of Mean)
-Skewness = -0.41, Kurtosis = 1.81, MValue = 2
-
-// **************************
-// Benchmark: PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=False]
-// *** Execute ***
-// Launch: 1 / 1
-Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
-// BeforeAnythingElse
-
-// Benchmark Process Environment Information:
-// Runtime=.NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
-// GC=Concurrent Workstation
-// Job: DefaultJob
-
-OverheadJitting  1: 1 op, 472000.00 ns, 472.0000 us/op
-WorkloadJitting  1: 1 op, 1933000.00 ns, 1.9330 ms/op
-
-OverheadJitting  2: 16 op, 292000.00 ns, 18.2500 us/op
-WorkloadJitting  2: 16 op, 2349000.00 ns, 146.8125 us/op
-
-WorkloadPilot    1: 16 op, 1143000.00 ns, 71.4375 us/op
-WorkloadPilot    2: 32 op, 3382000.00 ns, 105.6875 us/op
-WorkloadPilot    3: 64 op, 5427000.00 ns, 84.7969 us/op
-WorkloadPilot    4: 128 op, 8918000.00 ns, 69.6719 us/op
-WorkloadPilot    5: 256 op, 18832000.00 ns, 73.5625 us/op
-WorkloadPilot    6: 512 op, 36085000.00 ns, 70.4785 us/op
-WorkloadPilot    7: 1024 op, 70836000.00 ns, 69.1758 us/op
-WorkloadPilot    8: 2048 op, 141493000.00 ns, 69.0884 us/op
-WorkloadPilot    9: 4096 op, 285360000.00 ns, 69.6680 us/op
-WorkloadPilot   10: 8192 op, 565920000.00 ns, 69.0820 us/op
-
-OverheadWarmup   1: 8192 op, 16000.00 ns, 1.9531 ns/op
-OverheadWarmup   2: 8192 op, 14000.00 ns, 1.7090 ns/op
-OverheadWarmup   3: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadWarmup   4: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadWarmup   5: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadWarmup   6: 8192 op, 14000.00 ns, 1.7090 ns/op
-OverheadWarmup   7: 8192 op, 14000.00 ns, 1.7090 ns/op
-
-OverheadActual   1: 8192 op, 14000.00 ns, 1.7090 ns/op
-OverheadActual   2: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual   3: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual   4: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual   5: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual   6: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual   7: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual   8: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual   9: 8192 op, 25000.00 ns, 3.0518 ns/op
-OverheadActual  10: 8192 op, 23000.00 ns, 2.8076 ns/op
-OverheadActual  11: 8192 op, 14000.00 ns, 1.7090 ns/op
-OverheadActual  12: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual  13: 8192 op, 13000.00 ns, 1.5869 ns/op
-OverheadActual  14: 8192 op, 14000.00 ns, 1.7090 ns/op
-OverheadActual  15: 8192 op, 24000.00 ns, 2.9297 ns/op
-
-WorkloadWarmup   1: 8192 op, 562506000.00 ns, 68.6653 us/op
-WorkloadWarmup   2: 8192 op, 574000000.00 ns, 70.0684 us/op
-WorkloadWarmup   3: 8192 op, 567233000.00 ns, 69.2423 us/op
-WorkloadWarmup   4: 8192 op, 592198000.00 ns, 72.2898 us/op
-WorkloadWarmup   5: 8192 op, 575645000.00 ns, 70.2692 us/op
-WorkloadWarmup   6: 8192 op, 573455000.00 ns, 70.0018 us/op
-
-// BeforeActualRun
-WorkloadActual   1: 8192 op, 574583000.00 ns, 70.1395 us/op
-WorkloadActual   2: 8192 op, 571450000.00 ns, 69.7571 us/op
-WorkloadActual   3: 8192 op, 613340000.00 ns, 74.8706 us/op
-WorkloadActual   4: 8192 op, 576201000.00 ns, 70.3370 us/op
-WorkloadActual   5: 8192 op, 568541000.00 ns, 69.4020 us/op
-WorkloadActual   6: 8192 op, 566191000.00 ns, 69.1151 us/op
-WorkloadActual   7: 8192 op, 570506000.00 ns, 69.6418 us/op
-WorkloadActual   8: 8192 op, 567167000.00 ns, 69.2343 us/op
-WorkloadActual   9: 8192 op, 567606000.00 ns, 69.2878 us/op
-WorkloadActual  10: 8192 op, 567341000.00 ns, 69.2555 us/op
-WorkloadActual  11: 8192 op, 570009000.00 ns, 69.5812 us/op
-WorkloadActual  12: 8192 op, 568012000.00 ns, 69.3374 us/op
-WorkloadActual  13: 8192 op, 572769000.00 ns, 69.9181 us/op
-WorkloadActual  14: 8192 op, 571027000.00 ns, 69.7054 us/op
-WorkloadActual  15: 8192 op, 563852000.00 ns, 68.8296 us/op
-
-// AfterActualRun
-WorkloadResult   1: 8192 op, 574567600.00 ns, 70.1376 us/op
-WorkloadResult   2: 8192 op, 571434600.00 ns, 69.7552 us/op
-WorkloadResult   3: 8192 op, 576185600.00 ns, 70.3352 us/op
-WorkloadResult   4: 8192 op, 568525600.00 ns, 69.4001 us/op
-WorkloadResult   5: 8192 op, 566175600.00 ns, 69.1132 us/op
-WorkloadResult   6: 8192 op, 570490600.00 ns, 69.6400 us/op
-WorkloadResult   7: 8192 op, 567151600.00 ns, 69.2324 us/op
-WorkloadResult   8: 8192 op, 567590600.00 ns, 69.2860 us/op
-WorkloadResult   9: 8192 op, 567325600.00 ns, 69.2536 us/op
-WorkloadResult  10: 8192 op, 569993600.00 ns, 69.5793 us/op
-WorkloadResult  11: 8192 op, 567996600.00 ns, 69.3355 us/op
-WorkloadResult  12: 8192 op, 572753600.00 ns, 69.9162 us/op
-WorkloadResult  13: 8192 op, 571011600.00 ns, 69.7036 us/op
-WorkloadResult  14: 8192 op, 563836600.00 ns, 68.8277 us/op
-GC:  170 0 0 1076559872 8192
-
-// AfterAll
-
-Mean = 69.5368 us, StdErr = 0.1101 us (0.16%); N = 14, StdDev = 0.4121 us
-Min = 68.8277 us, Q1 = 69.2536 us, Median = 69.4897 us, Q3 = 69.7552 us, Max = 70.3352 us
-IQR = 0.5016 us, LowerFence = 68.5012 us, UpperFence = 70.5076 us
-ConfidenceInterval = [69.0720 us; 70.0017 us] (CI 99.9%), Margin = 0.4649 us (0.67% of Mean)
-Skewness = 0.29, Kurtosis = 2.15, MValue = 2
-
-// **************************
-// Benchmark: PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=True]
-// *** Execute ***
-// Launch: 1 / 1
-Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
-// BeforeAnythingElse
-
-// Benchmark Process Environment Information:
-// Runtime=.NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
-// GC=Concurrent Workstation
-// Job: DefaultJob
-
-OverheadJitting  1: 1 op, 358000.00 ns, 358.0000 us/op
-WorkloadJitting  1: 1 op, 435767000.00 ns, 435.7670 ms/op
-
-WorkloadWarmup   1: 1 op, 431829000.00 ns, 431.8290 ms/op
-WorkloadWarmup   2: 1 op, 423876000.00 ns, 423.8760 ms/op
-WorkloadWarmup   3: 1 op, 424707000.00 ns, 424.7070 ms/op
-WorkloadWarmup   4: 1 op, 425356000.00 ns, 425.3560 ms/op
-WorkloadWarmup   5: 1 op, 426972000.00 ns, 426.9720 ms/op
-WorkloadWarmup   6: 1 op, 430322000.00 ns, 430.3220 ms/op
-WorkloadWarmup   7: 1 op, 428187000.00 ns, 428.1870 ms/op
-WorkloadWarmup   8: 1 op, 422770000.00 ns, 422.7700 ms/op
-WorkloadWarmup   9: 1 op, 425572000.00 ns, 425.5720 ms/op
-WorkloadWarmup  10: 1 op, 425507000.00 ns, 425.5070 ms/op
-
-// BeforeActualRun
-WorkloadActual   1: 1 op, 431082000.00 ns, 431.0820 ms/op
-WorkloadActual   2: 1 op, 431174000.00 ns, 431.1740 ms/op
-WorkloadActual   3: 1 op, 428257000.00 ns, 428.2570 ms/op
-WorkloadActual   4: 1 op, 430875000.00 ns, 430.8750 ms/op
-WorkloadActual   5: 1 op, 425139000.00 ns, 425.1390 ms/op
-WorkloadActual   6: 1 op, 426985000.00 ns, 426.9850 ms/op
-WorkloadActual   7: 1 op, 437752000.00 ns, 437.7520 ms/op
-WorkloadActual   8: 1 op, 437467000.00 ns, 437.4670 ms/op
-WorkloadActual   9: 1 op, 429620000.00 ns, 429.6200 ms/op
-WorkloadActual  10: 1 op, 425123000.00 ns, 425.1230 ms/op
-WorkloadActual  11: 1 op, 425064000.00 ns, 425.0640 ms/op
-WorkloadActual  12: 1 op, 424138000.00 ns, 424.1380 ms/op
-WorkloadActual  13: 1 op, 424659000.00 ns, 424.6590 ms/op
-WorkloadActual  14: 1 op, 427330000.00 ns, 427.3300 ms/op
-WorkloadActual  15: 1 op, 424648000.00 ns, 424.6480 ms/op
-
-// AfterActualRun
-WorkloadResult   1: 1 op, 431082000.00 ns, 431.0820 ms/op
-WorkloadResult   2: 1 op, 431174000.00 ns, 431.1740 ms/op
-WorkloadResult   3: 1 op, 428257000.00 ns, 428.2570 ms/op
-WorkloadResult   4: 1 op, 430875000.00 ns, 430.8750 ms/op
-WorkloadResult   5: 1 op, 425139000.00 ns, 425.1390 ms/op
-WorkloadResult   6: 1 op, 426985000.00 ns, 426.9850 ms/op
-WorkloadResult   7: 1 op, 437752000.00 ns, 437.7520 ms/op
-WorkloadResult   8: 1 op, 437467000.00 ns, 437.4670 ms/op
-WorkloadResult   9: 1 op, 429620000.00 ns, 429.6200 ms/op
-WorkloadResult  10: 1 op, 425123000.00 ns, 425.1230 ms/op
-WorkloadResult  11: 1 op, 425064000.00 ns, 425.0640 ms/op
-WorkloadResult  12: 1 op, 424138000.00 ns, 424.1380 ms/op
-WorkloadResult  13: 1 op, 424659000.00 ns, 424.6590 ms/op
-WorkloadResult  14: 1 op, 427330000.00 ns, 427.3300 ms/op
-WorkloadResult  15: 1 op, 424648000.00 ns, 424.6480 ms/op
-GC:  13 5 1 77191976 1
-
-// AfterAll
-
-Mean = 428.6209 ms, StdErr = 1.1409 ms (0.27%); N = 15, StdDev = 4.4187 ms
-Min = 424.1380 ms, Q1 = 425.0640 ms, Median = 427.3300 ms, Q3 = 431.0820 ms, Max = 437.7520 ms
-IQR = 6.0180 ms, LowerFence = 416.0370 ms, UpperFence = 440.1090 ms
-ConfidenceInterval = [423.8970 ms; 433.3447 ms] (CI 99.9%), Margin = 4.7238 ms (1.10% of Mean)
-Skewness = 0.89, Kurtosis = 2.54, MValue = 2
-
-// **************************
-// Benchmark: PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=True]
-// *** Execute ***
-// Launch: 1 / 1
-Failed to set up high priority. Make sure you have the right permissions. Message: Permission denied
-// BeforeAnythingElse
-
-// Benchmark Process Environment Information:
-// Runtime=.NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
-// GC=Concurrent Workstation
-// Job: DefaultJob
-
-OverheadJitting  1: 1 op, 384000.00 ns, 384.0000 us/op
-WorkloadJitting  1: 1 op, 427781000.00 ns, 427.7810 ms/op
-
-WorkloadWarmup   1: 1 op, 421669000.00 ns, 421.6690 ms/op
-WorkloadWarmup   2: 1 op, 421472000.00 ns, 421.4720 ms/op
-WorkloadWarmup   3: 1 op, 420706000.00 ns, 420.7060 ms/op
-WorkloadWarmup   4: 1 op, 425400000.00 ns, 425.4000 ms/op
-WorkloadWarmup   5: 1 op, 425226000.00 ns, 425.2260 ms/op
-WorkloadWarmup   6: 1 op, 421123000.00 ns, 421.1230 ms/op
-WorkloadWarmup   7: 1 op, 421849000.00 ns, 421.8490 ms/op
-WorkloadWarmup   8: 1 op, 424911000.00 ns, 424.9110 ms/op
-WorkloadWarmup   9: 1 op, 425655000.00 ns, 425.6550 ms/op
-WorkloadWarmup  10: 1 op, 423298000.00 ns, 423.2980 ms/op
-
-// BeforeActualRun
-WorkloadActual   1: 1 op, 424582000.00 ns, 424.5820 ms/op
-WorkloadActual   2: 1 op, 423188000.00 ns, 423.1880 ms/op
-WorkloadActual   3: 1 op, 423585000.00 ns, 423.5850 ms/op
-WorkloadActual   4: 1 op, 421502000.00 ns, 421.5020 ms/op
-WorkloadActual   5: 1 op, 421882000.00 ns, 421.8820 ms/op
-WorkloadActual   6: 1 op, 422644000.00 ns, 422.6440 ms/op
-WorkloadActual   7: 1 op, 421755000.00 ns, 421.7550 ms/op
-WorkloadActual   8: 1 op, 420785000.00 ns, 420.7850 ms/op
-WorkloadActual   9: 1 op, 423354000.00 ns, 423.3540 ms/op
-WorkloadActual  10: 1 op, 422176000.00 ns, 422.1760 ms/op
-WorkloadActual  11: 1 op, 426053000.00 ns, 426.0530 ms/op
-WorkloadActual  12: 1 op, 428203000.00 ns, 428.2030 ms/op
-WorkloadActual  13: 1 op, 422126000.00 ns, 422.1260 ms/op
-WorkloadActual  14: 1 op, 428886000.00 ns, 428.8860 ms/op
-WorkloadActual  15: 1 op, 422050000.00 ns, 422.0500 ms/op
-
-// AfterActualRun
-WorkloadResult   1: 1 op, 424582000.00 ns, 424.5820 ms/op
-WorkloadResult   2: 1 op, 423188000.00 ns, 423.1880 ms/op
-WorkloadResult   3: 1 op, 423585000.00 ns, 423.5850 ms/op
-WorkloadResult   4: 1 op, 421502000.00 ns, 421.5020 ms/op
-WorkloadResult   5: 1 op, 421882000.00 ns, 421.8820 ms/op
-WorkloadResult   6: 1 op, 422644000.00 ns, 422.6440 ms/op
-WorkloadResult   7: 1 op, 421755000.00 ns, 421.7550 ms/op
-WorkloadResult   8: 1 op, 420785000.00 ns, 420.7850 ms/op
-WorkloadResult   9: 1 op, 423354000.00 ns, 423.3540 ms/op
-WorkloadResult  10: 1 op, 422176000.00 ns, 422.1760 ms/op
-WorkloadResult  11: 1 op, 426053000.00 ns, 426.0530 ms/op
-WorkloadResult  12: 1 op, 428203000.00 ns, 428.2030 ms/op
-WorkloadResult  13: 1 op, 422126000.00 ns, 422.1260 ms/op
-WorkloadResult  14: 1 op, 422050000.00 ns, 422.0500 ms/op
-GC:  13 5 1 76506216 1
-
-// AfterAll
-
-Mean = 423.1346 ms, StdErr = 0.5323 ms (0.13%); N = 14, StdDev = 1.9916 ms
-Min = 420.7850 ms, Q1 = 421.8820 ms, Median = 422.4100 ms, Q3 = 423.5850 ms, Max = 428.2030 ms
-IQR = 1.7030 ms, LowerFence = 419.3275 ms, UpperFence = 426.1395 ms
-ConfidenceInterval = [420.8879 ms; 425.3813 ms] (CI 99.9%), Margin = 2.2467 ms (0.53% of Mean)
-Skewness = 1.2, Kurtosis = 3.56, MValue = 2
 
 // ***** BenchmarkRunner: Finish  *****
 
@@ -779,123 +92,40 @@ Skewness = 1.2, Kurtosis = 3.56, MValue = 2
   BenchmarkDotNet.Artifacts/results/PersistedQueueBenchmarks.PersistedQueueBenchmarks-report.html
 
 // * Detailed results *
-PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=False]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 8.6440 us, StdErr = 0.0060 us (0.07%); N = 14, StdDev = 0.0225 us
-Min = 8.6123 us, Q1 = 8.6341 us, Median = 8.6373 us, Q3 = 8.6539 us, Max = 8.6979 us
-IQR = 0.0199 us, LowerFence = 8.6043 us, UpperFence = 8.6837 us
-ConfidenceInterval = [8.6186 us; 8.6694 us] (CI 99.9%), Margin = 0.0254 us (0.29% of Mean)
-Skewness = 0.92, Kurtosis = 3.07, MValue = 2
--------------------- Histogram --------------------
-[8.604 us ; 8.706 us) | @@@@@@@@@@@@@@
----------------------------------------------------
+PersistedQueueBenchmarks.PersistentQueueSqliteFilePersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+Runtime = ; GC = 
+There are not any results runs
 
-PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=False]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 884.2762 ns, StdErr = 2.9445 ns (0.33%); N = 13, StdDev = 10.6166 ns
-Min = 866.2998 ns, Q1 = 874.7116 ns, Median = 882.6066 ns, Q3 = 892.6050 ns, Max = 904.4658 ns
-IQR = 17.8933 ns, LowerFence = 847.8717 ns, UpperFence = 919.4449 ns
-ConfidenceInterval = [871.5623 ns; 896.9900 ns] (CI 99.9%), Margin = 12.7138 ns (1.44% of Mean)
-Skewness = 0.09, Kurtosis = 2, MValue = 2
--------------------- Histogram --------------------
-[865.297 ns ; 908.417 ns) | @@@@@@@@@@@@@
----------------------------------------------------
+PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+Runtime = ; GC = 
+There are not any results runs
 
-PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=True]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 3.8323 ms, StdErr = 0.0028 ms (0.07%); N = 13, StdDev = 0.0100 ms
-Min = 3.8214 ms, Q1 = 3.8241 ms, Median = 3.8311 ms, Q3 = 3.8393 ms, Max = 3.8542 ms
-IQR = 0.0152 ms, LowerFence = 3.8013 ms, UpperFence = 3.8621 ms
-ConfidenceInterval = [3.8203 ms; 3.8442 ms] (CI 99.9%), Margin = 0.0120 ms (0.31% of Mean)
-Skewness = 0.8, Kurtosis = 2.38, MValue = 2
--------------------- Histogram --------------------
-[3.818 ms ; 3.858 ms) | @@@@@@@@@@@@@
----------------------------------------------------
-
-PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=100, itemsToKeepInMemory=1000, useLargeData=True]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 3.8196 ms, StdErr = 0.0047 ms (0.12%); N = 14, StdDev = 0.0177 ms
-Min = 3.7953 ms, Q1 = 3.8080 ms, Median = 3.8169 ms, Q3 = 3.8314 ms, Max = 3.8503 ms
-IQR = 0.0234 ms, LowerFence = 3.7728 ms, UpperFence = 3.8666 ms
-ConfidenceInterval = [3.7997 ms; 3.8396 ms] (CI 99.9%), Margin = 0.0199 ms (0.52% of Mean)
-Skewness = 0.52, Kurtosis = 1.88, MValue = 2
--------------------- Histogram --------------------
-[3.789 ms ; 3.857 ms) | @@@@@@@@@@@@@@
----------------------------------------------------
-
-PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=False]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 1.0229 ms, StdErr = 0.0010 ms (0.10%); N = 15, StdDev = 0.0040 ms
-Min = 1.0151 ms, Q1 = 1.0195 ms, Median = 1.0243 ms, Q3 = 1.0265 ms, Max = 1.0285 ms
-IQR = 0.0071 ms, LowerFence = 1.0088 ms, UpperFence = 1.0372 ms
-ConfidenceInterval = [1.0186 ms; 1.0272 ms] (CI 99.9%), Margin = 0.0043 ms (0.42% of Mean)
-Skewness = -0.41, Kurtosis = 1.81, MValue = 2
--------------------- Histogram --------------------
-[1.014 ms ; 1.030 ms) | @@@@@@@@@@@@@@@
----------------------------------------------------
-
-PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=False]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 69.5368 us, StdErr = 0.1101 us (0.16%); N = 14, StdDev = 0.4121 us
-Min = 68.8277 us, Q1 = 69.2536 us, Median = 69.4897 us, Q3 = 69.7552 us, Max = 70.3352 us
-IQR = 0.5016 us, LowerFence = 68.5012 us, UpperFence = 70.5076 us
-ConfidenceInterval = [69.0720 us; 70.0017 us] (CI 99.9%), Margin = 0.4649 us (0.67% of Mean)
-Skewness = 0.29, Kurtosis = 2.15, MValue = 2
--------------------- Histogram --------------------
-[68.678 us ; 70.485 us) | @@@@@@@@@@@@@@
----------------------------------------------------
-
-PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=True]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 428.6209 ms, StdErr = 1.1409 ms (0.27%); N = 15, StdDev = 4.4187 ms
-Min = 424.1380 ms, Q1 = 425.0640 ms, Median = 427.3300 ms, Q3 = 431.0820 ms, Max = 437.7520 ms
-IQR = 6.0180 ms, LowerFence = 416.0370 ms, UpperFence = 440.1090 ms
-ConfidenceInterval = [423.8970 ms; 433.3447 ms] (CI 99.9%), Margin = 4.7238 ms (1.10% of Mean)
-Skewness = 0.89, Kurtosis = 2.54, MValue = 2
--------------------- Histogram --------------------
-[422.570 ms ; 439.320 ms) | @@@@@@@@@@@@@@@
----------------------------------------------------
-
-PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=10000, itemsToKeepInMemory=1000, useLargeData=True]
-Runtime = .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT; GC = Concurrent Workstation
-Mean = 423.1346 ms, StdErr = 0.5323 ms (0.13%); N = 14, StdDev = 1.9916 ms
-Min = 420.7850 ms, Q1 = 421.8820 ms, Median = 422.4100 ms, Q3 = 423.5850 ms, Max = 428.2030 ms
-IQR = 1.7030 ms, LowerFence = 419.3275 ms, UpperFence = 426.1395 ms
-ConfidenceInterval = [420.8879 ms; 425.3813 ms] (CI 99.9%), Margin = 2.2467 ms (0.53% of Mean)
-Skewness = 1.2, Kurtosis = 3.56, MValue = 2
--------------------- Histogram --------------------
-[420.062 ms ; 428.926 ms) | @@@@@@@@@@@@@@
----------------------------------------------------
+PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+Runtime = ; GC = 
+There are not any results runs
 
 // * Summary *
 
 BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14 (18A391) [Darwin 18.0.0]
 Intel Core i7-4870HQ CPU 2.50GHz (Haswell), 1 CPU, 8 logical and 4 physical cores
 .NET Core SDK=2.1.302
-  [Host]     : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT  [AttachedDebugger]
-  DefaultJob : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
+  [Host] : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT  [AttachedDebugger]
 
 
-                             Method | totalItems | itemsToKeepInMemory | useLargeData |             Mean |           Error |          StdDev | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
------------------------------------ |----------- |-------------------- |------------- |-----------------:|----------------:|----------------:|------------:|------------:|------------:|--------------------:|
- PersistentQueueInMemoryPersistence |        100 |                1000 |        False |       8,644.0 ns |        25.40 ns |        22.52 ns |      1.8463 |      0.0458 |           - |            11.38 KB |
-                        NormalQueue |        100 |                1000 |        False |         884.3 ns |        12.71 ns |        10.62 ns |      0.1898 |           - |           - |             1.17 KB |
- PersistentQueueInMemoryPersistence |        100 |                1000 |         True |   3,832,262.5 ns |    11,964.83 ns |     9,991.18 ns |    121.0938 |     54.6875 |           - |           762.55 KB |
-                        NormalQueue |        100 |                1000 |         True |   3,819,641.5 ns |    19,937.63 ns |    17,674.19 ns |    121.0938 |     46.8750 |           - |           746.69 KB |
- PersistentQueueInMemoryPersistence |      10000 |                1000 |        False |   1,022,920.6 ns |     4,298.67 ns |     4,020.97 ns |    123.0469 |    123.0469 |    123.0469 |           661.45 KB |
-                        NormalQueue |      10000 |                1000 |        False |      69,536.8 ns |       464.85 ns |       412.08 ns |     20.7520 |           - |           - |           128.34 KB |
- PersistentQueueInMemoryPersistence |      10000 |                1000 |         True | 428,620,866.7 ns | 4,723,847.08 ns | 4,418,689.49 ns |  13000.0000 |   5000.0000 |   1000.0000 |         75382.79 KB |
-                        NormalQueue |      10000 |                1000 |         True | 423,134,642.9 ns | 2,246,696.72 ns | 1,991,638.12 ns |  13000.0000 |   5000.0000 |   1000.0000 |          74713.1 KB |
+                               Method | totalItems | itemsToKeepInMemory | useLargeData | Mean | Error |
+------------------------------------- |----------- |-------------------- |------------- |-----:|------:|
+ PersistentQueueSqliteFilePersistence |       1000 |                 100 |         True |   NA |    NA |
+   PersistentQueueInMemoryPersistence |       1000 |                 100 |         True |   NA |    NA |
+                          NormalQueue |       1000 |                 100 |         True |   NA |    NA |
+
+Benchmarks with issues:
+  PersistedQueueBenchmarks.PersistentQueueSqliteFilePersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+  PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+  PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
 
 // * Warnings *
 Environment
   Summary -> Benchmark was executed with attached debugger
-
-// * Hints *
-Outliers
-  PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: Default -> 1 outlier  was  removed
-  PersistedQueueBenchmarks.NormalQueue: Default                        -> 3 outliers were removed
-  PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: Default -> 2 outliers were removed
 
 // * Legends *
   totalItems          : Value of the 'totalItems' parameter
@@ -903,17 +133,12 @@ Outliers
   useLargeData        : Value of the 'useLargeData' parameter
   Mean                : Arithmetic mean of all measurements
   Error               : Half of 99.9% confidence interval
-  StdDev              : Standard deviation of all measurements
-  Gen 0/1k Op         : GC Generation 0 collects per 1k Operations
-  Gen 1/1k Op         : GC Generation 1 collects per 1k Operations
-  Gen 2/1k Op         : GC Generation 2 collects per 1k Operations
-  Allocated Memory/Op : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
   1 ns                : 1 Nanosecond (0.000000001 sec)
 
 // * Diagnostic Output - MemoryDiagnoser *
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:02:19 (139.67 sec), executed benchmarks: 8
+Run time: 00:00:04 (4.88 sec), executed benchmarks: 3
 
 // * Artifacts cleanup *

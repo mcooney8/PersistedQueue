@@ -3,18 +3,17 @@
 BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14 (18A391) [Darwin 18.0.0]
 Intel Core i7-4870HQ CPU 2.50GHz (Haswell), 1 CPU, 8 logical and 4 physical cores
 .NET Core SDK=2.1.302
-  [Host]     : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT  [AttachedDebugger]
-  DefaultJob : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT
+  [Host] : .NET Core 2.1.2 (CoreCLR 4.6.26628.05, CoreFX 4.6.26629.01), 64bit RyuJIT  [AttachedDebugger]
 
 
 ```
-|                             Method | totalItems | itemsToKeepInMemory | useLargeData |             Mean |           Error |          StdDev | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|----------------------------------- |----------- |-------------------- |------------- |-----------------:|----------------:|----------------:|------------:|------------:|------------:|--------------------:|
-| **PersistentQueueInMemoryPersistence** |        **100** |                **1000** |        **False** |       **8,644.0 ns** |        **25.40 ns** |        **22.52 ns** |      **1.8463** |      **0.0458** |           **-** |            **11.38 KB** |
-|                        NormalQueue |        100 |                1000 |        False |         884.3 ns |        12.71 ns |        10.62 ns |      0.1898 |           - |           - |             1.17 KB |
-| **PersistentQueueInMemoryPersistence** |        **100** |                **1000** |         **True** |   **3,832,262.5 ns** |    **11,964.83 ns** |     **9,991.18 ns** |    **121.0938** |     **54.6875** |           **-** |           **762.55 KB** |
-|                        NormalQueue |        100 |                1000 |         True |   3,819,641.5 ns |    19,937.63 ns |    17,674.19 ns |    121.0938 |     46.8750 |           - |           746.69 KB |
-| **PersistentQueueInMemoryPersistence** |      **10000** |                **1000** |        **False** |   **1,022,920.6 ns** |     **4,298.67 ns** |     **4,020.97 ns** |    **123.0469** |    **123.0469** |    **123.0469** |           **661.45 KB** |
-|                        NormalQueue |      10000 |                1000 |        False |      69,536.8 ns |       464.85 ns |       412.08 ns |     20.7520 |           - |           - |           128.34 KB |
-| **PersistentQueueInMemoryPersistence** |      **10000** |                **1000** |         **True** | **428,620,866.7 ns** | **4,723,847.08 ns** | **4,418,689.49 ns** |  **13000.0000** |   **5000.0000** |   **1000.0000** |         **75382.79 KB** |
-|                        NormalQueue |      10000 |                1000 |         True | 423,134,642.9 ns | 2,246,696.72 ns | 1,991,638.12 ns |  13000.0000 |   5000.0000 |   1000.0000 |          74713.1 KB |
+|                               Method | totalItems | itemsToKeepInMemory | useLargeData | Mean | Error |
+|------------------------------------- |----------- |-------------------- |------------- |-----:|------:|
+| PersistentQueueSqliteFilePersistence |       1000 |                 100 |         True |   NA |    NA |
+|   PersistentQueueInMemoryPersistence |       1000 |                 100 |         True |   NA |    NA |
+|                          NormalQueue |       1000 |                 100 |         True |   NA |    NA |
+
+Benchmarks with issues:
+  PersistedQueueBenchmarks.PersistentQueueSqliteFilePersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+  PersistedQueueBenchmarks.PersistentQueueInMemoryPersistence: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]
+  PersistedQueueBenchmarks.NormalQueue: DefaultJob [totalItems=1000, itemsToKeepInMemory=100, useLargeData=True]

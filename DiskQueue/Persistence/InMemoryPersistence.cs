@@ -1,11 +1,12 @@
-﻿using System;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersistedQueue.Persistence
 {
     public class InMemoryPersistence<T> : IPersistence<T>
     {
-        Dictionary<uint, T> items = new Dictionary<uint, T>();
+        ConcurrentDictionary<uint, T> items = new ConcurrentDictionary<uint, T>();
 
         public T Load(uint key)
         {
@@ -19,7 +20,7 @@ namespace PersistedQueue.Persistence
 
         public void Remove(uint key)
         {
-            items.Remove(key);
+            items.TryRemove(key, out _);
         }
 
         public void Clear()
@@ -34,6 +35,11 @@ namespace PersistedQueue.Persistence
 
         public void Dispose()
         {
+        }
+
+        public Task<T> LoadAsync(uint key)
+        {
+            return Task.Run(() => Load(key));
         }
     }
 }
