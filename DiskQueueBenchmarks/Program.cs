@@ -16,8 +16,9 @@ namespace PersistedQueueBenchmarks
 
         private static void Release()
         {
-            //BenchmarkRunner.Run<SqlitePersistedQueueBenchmarks>();
-            BenchmarkRunner.Run<PersistedQueueBenchmarks>();
+            BenchmarkRunner.Run<QueueBenchmarks>();
+            BenchmarkRunner.Run<InMemoryPersistedQueueBenchmarks>();
+            BenchmarkRunner.Run<SqlitePersistedQueueBenchmarks>();
         }
 
         private static void Debug()
