@@ -4,18 +4,19 @@ A queue implementation that keeps all data persisted. The main benefits/goal of 
 # Example Usage
 ```c#
 // Setup a queue using a flat file as the persistence mechanism
-IPersistence<int> flatFilePersistence = new FlatFilePersistence<int>("file.persistence");
-PersistentQueue<int> persistentQueue = new PersistentQueue<int>(flatFilePersistence, maxItemsInMemory: 1024);
+IPersistence<int> sqlitePersistence = new SqlitePersistence<int>("persist.db");
+PersistedQueue<int> persistentQueue = new PersistedQueue<int>(sqlitePersistence);
 
 // And then it can be used like any normal queue
-persistentQueue.Enqueue(1);
-persistentQueue.Peek();
-int i = persistentQueue.Dequeue();
+persistedQueue.Enqueue(1);
+persistedQueue.Peek();
+int i = persistedQueue.Dequeue();
 
 // One additional functionality is the ability to load the existing data from persistence
 // By default it loads in the constructor, but it can be deferred
-PersistentQueue<int> persistentQueue = new PersistentQueue<int>(flatFilePersistence, maxItemsInMemory: 1024, deferLoad: true);
-persistentQueue.Load();
+PersistedQueueConfiguration config = new PersistedQueueConfiguration { DeferLoad = true };
+PersistedQueue<int> persistentQueue = new PersistedQueue<int>(sqlitePersistence, config);
+persistedQueue.Load();
 ```
 
 # Custom Persistence
