@@ -1,6 +1,6 @@
 ﻿namespace PersistedQueue.Sqlite
 {
-    public class DatabaseItem
+    public struct DatabaseItem
     {
         public uint Key { get; set; }
         public byte[] SerializedItem { get; set;  }

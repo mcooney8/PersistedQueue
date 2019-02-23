@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using LogAnalyzer.PersistedQueue.Sqlite;
 using PersistedQueue.Persistence;
 using Sqlite.Fast;
 
@@ -13,23 +14,35 @@ namespace PersistedQueue.Sqlite
         private const string TableName = "PersistedItem";
 
         private readonly BinaryFormatter binaryFormatter;
-        private readonly string dbFilePath;
 
         private Connection connection;
         private bool disposed;
 
+        private DisposablePool<Statements> statementPool;
+
+        private static readonly string CreateTableSql = $"create table if not exists {TableName} ({nameof(DatabaseItem.Key)} INTEGER, {nameof(DatabaseItem.SerializedItem)} BLOB)";
+        private static readonly string DropTableSql = $"drop table {TableName}";
+
+        private Statement createTableStatment;
+        private Statement dropTableStatement;
+
         public SqlitePersistence(string dbFilePath)
         {
-            this.dbFilePath = dbFilePath;
             connection = new Connection(dbFilePath);
+            createTableStatment = connection.CompileStatement(CreateTableSql);
+            createTableStatment.Execute();
             binaryFormatter = new BinaryFormatter();
+            statementPool = new DisposablePool<Statements>(factory: () => new Statements(TableName, connection), poolSize: 32);
         }
 
         public void Clear()
         {
-            connection.Dispose();
-            File.Delete(dbFilePath);
-            connection = new Connection(dbFilePath);
+            if (dropTableStatement == null)
+            {
+                dropTableStatement = connection.CompileStatement(DropTableSql);
+            }
+            dropTableStatement.Execute();
+            createTableStatment.Execute();
         }
 
         public void Dispose()
@@ -37,24 +50,32 @@ namespace PersistedQueue.Sqlite
             if (!disposed)
             {
                 connection.Dispose();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
                 disposed = true;
             }
         }
 
         public IEnumerable<T> Load()
         {
-            SelectStatement select = new SelectStatement(TableName, connection);
-            foreach (DatabaseItem dbItem in select.Execute())
-            {
-                yield return Convert(dbItem);
-            }
+            return new List<T>();
         }
 
         public T Load(uint key)
         {
-            SelectStatement select = new SelectStatement(TableName, connection);
-            DatabaseItem dbItem = select.Execute(key);
-            return Convert(dbItem);
+            var statements = statementPool.Rent();
+            DatabaseItem dbItem = statements.SelectStatement.Execute(key);
+            var result = Convert(dbItem);
+            statementPool.Return(statements);
+            return result;
+        }
+
+        public bool Contains(uint key)
+        {
+            var statements = statementPool.Rent();
+            bool result = statements.SelectStatement.Exists(key);
+            statementPool.Return(statements);
+            return result;
         }
 
         public Task<T> LoadAsync(uint key)
@@ -65,14 +86,16 @@ namespace PersistedQueue.Sqlite
         public void Persist(uint key, T item)
         {
             DatabaseItem dbItem = Convert(key, item);
-            InsertStatement insert = new InsertStatement(TableName, connection);
-            insert.Execute(dbItem);
+            var statements = statementPool.Rent();
+            statements.InsertStatement.Execute(dbItem);
+            statementPool.Return(statements);
         }
 
         public void Remove(uint key)
         {
-            DeleteStatement delete = new DeleteStatement(TableName, connection);
-            delete.Execute(key);
+            var statements = statementPool.Rent();
+            statements.DeleteStatement.Execute(key);
+            statementPool.Return(statements);
         }
 
         private T Convert(DatabaseItem dbItem)

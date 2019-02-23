@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using PersistedQueue;
 using PersistedQueue.Persistence;
-using PersistedQueue.Sqlite;
 
 namespace PersistedQueueBenchmarks
 {
@@ -13,76 +13,25 @@ namespace PersistedQueueBenchmarks
     [MemoryDiagnoser]
     public class PersistedQueueBenchmarks
     {
-        private const string PersistenceFilename = "persistence";
-
-        [Params(1000)]
+        [Params(1000, 100000)]
         public int totalItems;
 
-        [Params(100)]
+        [Params(1000, 10000)]
         public int itemsToKeepInMemory;
 
-        [Params(true)]
+        [Params(false, true)]
         public bool useLargeData;
 
-        //[GlobalSetup]
-        public void GlobalSetup()
-        {
-            IPersistence<LargeData> persistence = new FlatFilePersistence<LargeData>(PersistenceFilename);
-            persistence.Clear();
-            persistence.Dispose();
-            if (new FileInfo(PersistenceFilename).Length > 0)
-            {
-                throw new Exception("Unexpected length");
-            }
-        }
-
         [Benchmark]
-        public void PersistentQueueSqliteFilePersistence()
-        {
-            IPersistence<LargeData> persistence = null;
-            try
-            {
-                persistence = new SqlitePersistence<LargeData>(PersistenceFilename);
-                PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
-                for (int i = 0; i < totalItems; i++)
-                {
-                    queue.Enqueue(new LargeData());
-                }
-            }
-            finally
-            {
-                persistence?.Clear();
-                persistence?.Dispose();
-            }
-        }
-
-        //[Benchmark]
-        public void PersistentQueueFlatFilePersistence()
-        {
-            if (new FileInfo(PersistenceFilename).Length > 0)
-            {
-                throw new Exception("Unexpected length");
-            }
-            if (useLargeData)
-            {
-                FlatFileLargeData();
-            }
-            else
-            {
-                FlatFileInt();
-            }
-        }
-
-        [Benchmark]
-        public void PersistentQueueInMemoryPersistence()
+        public async Task PersistentQueueInMemoryPersistence()
         {
             if (useLargeData)
             {
-                InMemoryLargeData();
+                await InMemoryLargeData();
             }
             else
             {
-                InMemoryInt();
+                await InMemoryInt();
             }
         }
 
@@ -99,77 +48,33 @@ namespace PersistedQueueBenchmarks
             }
         }
 
-        private void FlatFileLargeData()
-        {
-            IPersistence<LargeData> persistence = null;
-            try
-            {
-                persistence = new FlatFilePersistence<LargeData>(PersistenceFilename);
-                PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
-                for (int i = 0; i < totalItems; i++)
-                {
-                    queue.Enqueue(new LargeData());
-                }
-                for (int i = 0; i < totalItems; i++)
-                {
-                    queue.DequeueAsync();
-                }
-            }
-            finally
-            {
-                persistence?.Clear();
-                persistence?.Dispose();
-            }
-        }
-
-        private void FlatFileInt()
-        {
-            IPersistence<int> persistence = null;
-            try
-            {
-                persistence = new FlatFilePersistence<int>(PersistenceFilename);
-                PersistedQueue<int> queue = new PersistedQueue<int>(persistence, itemsToKeepInMemory);
-                for (int i = 0; i < totalItems; i++)
-                {
-                    queue.Enqueue(i);
-                }
-                for (int i = 0; i < totalItems; i++)
-                {
-                    queue.DequeueAsync();
-                }
-            }
-            finally
-            {
-                persistence?.Clear();
-                persistence?.Dispose();
-            }
-        }
-
-        private void InMemoryLargeData()
+        private async Task InMemoryLargeData()
         {
             IPersistence<LargeData> persistence = new InMemoryPersistence<LargeData>();
-            PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, itemsToKeepInMemory);
+            PersistedQueueConfiguration config = new PersistedQueueConfiguration { MaxItemsInMemory = itemsToKeepInMemory };
+            PersistedQueue<LargeData> queue = new PersistedQueue<LargeData>(persistence, config);
             for (int i = 0; i < totalItems; i++)
             {
                 queue.Enqueue(new LargeData());
             }
             for (int i = 0; i < totalItems; i++)
             {
-                queue.DequeueAsync();
+                await queue.DequeueAsync();
             }
         }
 
-        private void InMemoryInt()
+        private async Task InMemoryInt()
         {
             IPersistence<int> persistence = new InMemoryPersistence<int>();
-            PersistedQueue<int> queue = new PersistedQueue<int>(persistence, itemsToKeepInMemory);
+            PersistedQueueConfiguration config = new PersistedQueueConfiguration { MaxItemsInMemory = itemsToKeepInMemory };
+            PersistedQueue<int> queue = new PersistedQueue<int>(persistence, config);
             for (int i = 0; i < totalItems; i++)
             {
                 queue.Enqueue(i);
             }
             for (int i = 0; i < totalItems; i++)
             {
-                queue.DequeueAsync();
+                await queue.DequeueAsync();
             }
         }
 
@@ -197,29 +102,6 @@ namespace PersistedQueueBenchmarks
             {
                 queue.Dequeue();
             }
-        }
-
-        [Serializable]
-        private class LargeData
-        {
-            public LargeData()
-            {
-                Random random = new Random();
-                DoubleValue = random.NextDouble();
-                byte[] buffer = new byte[1024];
-                random.NextBytes(buffer);
-                StringValue1 = Encoding.ASCII.GetString(buffer);
-                random.NextBytes(buffer);
-                StringValue2 = Encoding.ASCII.GetString(buffer);
-                random.NextBytes(buffer);
-                StringValue3 = Encoding.ASCII.GetString(buffer);
-                BoolValue = random.Next() % 2 == 0;
-            }
-            public double DoubleValue { get; }
-            public string StringValue1 { get; }
-            public string StringValue2 { get; }
-            public string StringValue3 { get; }
-            public bool BoolValue { get; }
         }
     }
 }

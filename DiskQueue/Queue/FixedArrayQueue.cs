@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PersistedQueue
 {
-    internal class FixedArrayStack<T> : IEnumerable<T>
+    internal class FixedArrayQueue<T> : IEnumerable<T>
     {
         private const int DefaultStartingSize = 512;
 
@@ -12,7 +12,7 @@ namespace PersistedQueue
         private T[] items;
         private int headIndex;
 
-        public FixedArrayStack(int capacity)
+        public FixedArrayQueue(int capacity)
         {
             this.capacity = capacity;
             int startingSize = Math.Min(DefaultStartingSize, capacity);
@@ -21,13 +21,13 @@ namespace PersistedQueue
 
         public int Count { get; private set; }
 
-        public void Push(T item)
+        public void Enqueue(T item)
         {
             if (Count == capacity)
             {
                 throw new InvalidOperationException("Cannot push any more items, stack is full");
             }
-            if (Count == items.Length)
+            if ((headIndex + Count) == items.Length)
             {
                 ExpandArray();
             }
@@ -36,23 +36,23 @@ namespace PersistedQueue
             Count++;
         }
 
-        public T Pop()
+        public T Dequeue()
         {
             if (Count == 0)
             {
                 throw new InvalidOperationException("Cannot pop an empty stack");
             }
-            var itemToPop = items[headIndex];
+            var itemToDequeue = items[headIndex];
             Count--;
             if (Count == 0)
             {
-                headIndex = 0;
+                ResetArray();
             }
             else
             {
                 headIndex = (headIndex + 1) % capacity;
             }
-            return itemToPop;
+            return itemToDequeue;
         }
 
         public T Peek()
@@ -99,6 +99,13 @@ namespace PersistedQueue
                 items = newArray;
                 headIndex = 0;
             }
+        }
+
+        private void ResetArray()
+        {
+            var newArrayLength = Math.Min(DefaultStartingSize, capacity);
+            items = new T[newArrayLength];
+            headIndex = 0;
         }
     }
 }

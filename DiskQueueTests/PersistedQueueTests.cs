@@ -115,7 +115,8 @@ namespace PersistedQueueTests
         private PersistedQueue<T> CreatePersistedQueue<T>(int inMemoryCapacity = 1024)
         {
             IPersistence<T> persistence = new InMemoryPersistence<T>();
-            return  new PersistedQueue<T>(persistence, inMemoryCapacity);
+            PersistedQueueConfiguration config = new PersistedQueueConfiguration { MaxItemsInMemory = inMemoryCapacity };
+            return  new PersistedQueue<T>(persistence, config);
         }
     }
 }

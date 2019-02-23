@@ -16,7 +16,7 @@
     <ProjectReference Include="..\DiskQueue\PersistedQueue.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Sqlite.Fast" Version="1.1.6-alpha" />
+    <PackageReference Include="Sqlite.Fast" Version="1.2.5-alpha" />
     <PackageReference Include="SQLite.Interop.dll" Version="1.0.103" />
   </ItemGroup>
 </Project>

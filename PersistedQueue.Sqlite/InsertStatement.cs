@@ -5,8 +5,10 @@ namespace PersistedQueue.Sqlite
 {
     internal class InsertStatement : IDisposable
     {
-        private static readonly ParameterConverter<DatabaseItem> DatabaseItemypeMap =
-            ParameterConverter.Builder<DatabaseItem>().Compile();
+        private static readonly ParameterConverter<DatabaseItem> TypeMap =
+            ParameterConverter.Builder<DatabaseItem>()
+            .With(dbItem => dbItem.SerializedItem, (byte[] a) => a.AsSpan())
+            .Compile();
 
         private readonly Statement<DatabaseItem> statement;
 
@@ -15,7 +17,8 @@ namespace PersistedQueue.Sqlite
             string Sql = $@"
                 insert into {tableName} ({nameof(DatabaseItem.Key)}, {nameof(DatabaseItem.SerializedItem)})
                 values (@{nameof(DatabaseItem.Key)}, @{nameof(DatabaseItem.SerializedItem)})";
-            statement = connection.CompileStatement<DatabaseItem>(Sql);
+
+            statement = connection.CompileStatement(Sql, TypeMap);
         }
 
         public void Execute(DatabaseItem item)

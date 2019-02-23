@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using PersistedQueue.Persistence;
 
@@ -13,30 +14,42 @@ namespace PersistedQueue
     {
         private readonly IPersistence<T> persistence;
         private readonly int maxItemsInMemory;
-        private readonly FixedArrayStack<Task<T>> inMemoryItems;
-        private readonly object queueLock = new object();
+        private readonly FixedArrayQueue<Task<T>> inMemoryItems;
+        private readonly SemaphoreSlim queueSemaphore = new SemaphoreSlim(1);
+        private readonly bool persistAllItems;
 
         private uint nextKey;
         private uint firstKey = 1;
+
+        private uint persistenceFirstKey = uint.MaxValue;
 
         private bool isLoaded;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:PersistedQueue.PersistedQueue`1"/> class.
         /// </summary>
-        /// <param name="persistence">Persistence.</param>
-        /// <param name="maxItemsInMemory">Max items in memory.</param>
-        /// <param name="deferLoad">If set to <c>true</c> defer load.</param>
-        public PersistedQueue(IPersistence<T> persistence, int maxItemsInMemory, bool deferLoad = false)
+        /// <param name="persistence"></param>
+        public PersistedQueue(IPersistence<T> persistence) :
+            this(persistence, new PersistedQueueConfiguration { DeferLoad = false, MaxItemsInMemory = 1024, PersistAllItems = true })
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:PersistedQueue.PersistedQueue`1"/> class.
+        /// </summary>
+        /// <param name="persistence"></param>
+        /// <param name="configuration"></param>
+        public PersistedQueue(IPersistence<T> persistence, PersistedQueueConfiguration configuration)
+        {
+            this.persistence = persistence;
+            persistAllItems = configuration.PersistAllItems;
+            maxItemsInMemory = configuration.MaxItemsInMemory;
             if (maxItemsInMemory < 1)
             {
                 throw new ArgumentException("Must be greater than 0", nameof(maxItemsInMemory));
             }
-            this.maxItemsInMemory = maxItemsInMemory;
-            this.inMemoryItems = new FixedArrayStack<Task<T>>(maxItemsInMemory);
-            this.persistence = persistence;
-            if (!deferLoad)
+            inMemoryItems = new FixedArrayQueue<Task<T>>(maxItemsInMemory);
+            if (!configuration.DeferLoad)
             {
                 Load();
             }
@@ -54,25 +67,30 @@ namespace PersistedQueue
         /// <param name="item">Item to be enqueued</param>
         public void Enqueue(T item)
         {
-            lock (queueLock)
+            queueSemaphore.Wait();
+            nextKey++;
+            var enqueueInMemory = Count < maxItemsInMemory;
+            if (enqueueInMemory)
             {
-                nextKey++;
-                persistence.Persist(nextKey, item); // TODO: Make this async?
-                if (Count < maxItemsInMemory)
-                {
-                    inMemoryItems.Push(Task.FromResult(item));
-                }
-                Count++;
+                inMemoryItems.Enqueue(Task.FromResult(item));
             }
+            if (!enqueueInMemory || persistAllItems)
+            {
+                persistenceFirstKey = nextKey;
+                persistence.Persist(nextKey, item);
+            }
+            Count++;
+            queueSemaphore.Release();
         }
 
         /// <summary>
         /// Removes the top item and returns it
         /// </summary>
         /// <returns>The dequeued item</returns>
-        public Task<T> DequeueAsync()
+        public async Task<T> DequeueAsync()
         {
-            lock (queueLock)
+            queueSemaphore.Wait();
+            try
             {
                 if (Count == 0)
                 {
@@ -80,16 +98,24 @@ namespace PersistedQueue
                 }
                 Count--;
                 uint keyToRemove = firstKey++;
-                Task<T> dequeueTask = inMemoryItems.Pop();
-                dequeueTask.ContinueWith(task => persistence.Remove(keyToRemove));
+                T item = await inMemoryItems.Dequeue();
+                if (persistenceFirstKey == keyToRemove)
+                {
+                    persistence.Remove(keyToRemove);
+                    persistenceFirstKey++;
+                }
                 if (inMemoryItems.Count < Count)
                 {
                     uint keyToLoad = firstKey + (uint)inMemoryItems.Count;
                     Task<T> loadTask = persistence.LoadAsync(keyToLoad);
                     loadTask.ConfigureAwait(false);
-                    inMemoryItems.Push(loadTask);
+                    inMemoryItems.Enqueue(loadTask);
                 }
-                return dequeueTask;
+                return item;
+            }
+            finally
+            {
+                queueSemaphore.Release();
             }
         }
 
@@ -111,16 +137,13 @@ namespace PersistedQueue
         /// </summary>
         public void Load()
         {
-            lock (queueLock)
+            if (!isLoaded)
             {
-                if (!isLoaded)
+                foreach (T loadedItem in persistence.Load())
                 {
-                    foreach (T loadedItem in persistence.Load())
-                    {
-                        Enqueue(loadedItem);
-                    }
-                    isLoaded = true;
+                    Enqueue(loadedItem);
                 }
+                isLoaded = true;
             }
         }
 
