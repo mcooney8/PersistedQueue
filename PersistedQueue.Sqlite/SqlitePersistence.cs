@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using LogAnalyzer.PersistedQueue.Sqlite;
+using MessagePack;
 using PersistedQueue.Persistence;
 using Sqlite.Fast;
 
@@ -12,8 +11,6 @@ namespace PersistedQueue.Sqlite
     public class SqlitePersistence<T> : IPersistence<T>
     {
         private const string TableName = "PersistedItem";
-
-        private readonly BinaryFormatter binaryFormatter;
 
         private Connection connection;
         private bool disposed;
@@ -31,7 +28,6 @@ namespace PersistedQueue.Sqlite
             connection = new Connection(dbFilePath);
             createTableStatment = connection.CompileStatement(CreateTableSql);
             createTableStatment.Execute();
-            binaryFormatter = new BinaryFormatter();
             statementPool = new DisposablePool<Statements>(factory: () => new Statements(TableName, connection), poolSize: 32);
         }
 
@@ -100,18 +96,15 @@ namespace PersistedQueue.Sqlite
 
         private T Convert(DatabaseItem dbItem)
         {
-            Stream serializedItemStream = new MemoryStream(dbItem.SerializedItem);
-            return (T)binaryFormatter.Deserialize(serializedItemStream);
+            return MessagePackSerializer.Deserialize<T>(dbItem.SerializedItem);
         }
 
         private DatabaseItem Convert(uint key, T item)
         {
-            MemoryStream serialized = new MemoryStream();
-            binaryFormatter.Serialize(serialized, item);
             return new DatabaseItem
             {
                 Key = key,
-                SerializedItem = serialized.ToArray()
+                SerializedItem = MessagePackSerializer.Serialize(item)
             };
         }
     }

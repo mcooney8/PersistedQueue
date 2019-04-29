@@ -7,8 +7,10 @@ namespace PersistedQueue.Sqlite
     internal class SelectStatement : IDisposable
     {
         private readonly Statement<DatabaseItem, uint> selectByIdStatement;
+        private static FromSpan<byte, byte[]> fromSpan =
+            new FromSpan<byte, byte[]>((in ReadOnlySpan<byte> value) => value.ToArray());
         private static readonly ResultConverter<DatabaseItem> resultConverter = ResultConverter.Builder<DatabaseItem>()
-            .With(dbItem => dbItem.SerializedItem, (ReadOnlySpan<byte> span) => span.ToArray())
+            .With(dbItem => dbItem.SerializedItem, fromSpan)
             .Compile();
         private static readonly ParameterConverter<uint> parameterConverter =
             ParameterConverter.ScalarBuilder<uint>(true)
@@ -29,15 +31,15 @@ namespace PersistedQueue.Sqlite
 
         public DatabaseItem Execute(uint key)
         {
-            DatabaseItem item = new DatabaseItem();
-            selectByIdStatement.Bind(key).Execute(ref item);
+            DatabaseItem item;
+            selectByIdStatement.Bind(key).Execute(out item);
             return item;
         }
 
         public bool Exists(uint key)
         {
-            bool exists = false;
-            existsStatement.Bind(key).Execute(ref exists);
+            bool exists;
+            existsStatement.Bind(key).Execute(out exists);
             return exists;
         }
 

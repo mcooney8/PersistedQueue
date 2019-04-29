@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DiskQueue\PersistedQueue.csproj" />
     <ProjectReference Include="..\PersistedQueue.Sqlite\PersistedQueue.Sqlite.csproj" />
+    <ProjectReference Include="..\PersistedQueue.Nosql\PersistedQueue.Nosql.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.config">

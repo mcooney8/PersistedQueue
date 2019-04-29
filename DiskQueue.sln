@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistedQueueBenchmarks", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistedQueue.Sqlite", "PersistedQueue.Sqlite\PersistedQueue.Sqlite.csproj", "{50B18604-27C8-40BE-BA43-C944FC92337B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistedQueue.Nosql", "PersistedQueue.Nosql\PersistedQueue.Nosql.csproj", "{4EDE6469-DDA8-4BD4-AED6-9B0EB51E0DD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,5 +33,9 @@ Global
 		{50B18604-27C8-40BE-BA43-C944FC92337B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50B18604-27C8-40BE-BA43-C944FC92337B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50B18604-27C8-40BE-BA43-C944FC92337B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EDE6469-DDA8-4BD4-AED6-9B0EB51E0DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EDE6469-DDA8-4BD4-AED6-9B0EB51E0DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EDE6469-DDA8-4BD4-AED6-9B0EB51E0DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EDE6469-DDA8-4BD4-AED6-9B0EB51E0DD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

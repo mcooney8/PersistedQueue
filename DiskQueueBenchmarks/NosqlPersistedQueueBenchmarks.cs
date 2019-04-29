@@ -1,15 +1,16 @@
-﻿using BenchmarkDotNet.Attributes;
-using PersistedQueue;
-using PersistedQueue.Persistence;
-using PersistedQueue.Sqlite;
+﻿using System;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
+using PersistedQueue;
+using PersistedQueue.Nosql;
+using PersistedQueue.Persistence;
 
 namespace PersistedQueueBenchmarks
 {
     [MemoryDiagnoser]
-    public class SqlitePersistedQueueBenchmarks
+    public class NosqlPersistedQueueBenchmarks
     {
-        private const string PersistenceFilename = @"C:\Test\persistence.db";
+        private const string PersistenceFilePath = @"/Users/Michael/Test/Persistence";
 
         [Params(10000)]
         public int totalItems;
@@ -20,24 +21,36 @@ namespace PersistedQueueBenchmarks
         [Params(false)]
         public bool useLargeData;
 
+        private IPersistence<int> smallPersistence;
+        private PersistedQueue<int> smallQueue;
         private IPersistence<LargeData> largePersistence;
         private PersistedQueue<LargeData> largeQueue;
 
-        private IPersistence<int> smallPersistence;
-        private PersistedQueue<int> smallQueue;
+        [Benchmark]
+        public Task PersistentQueueSqliteFilePersistence()
+        {
+            if (useLargeData)
+            {
+                return LargeData();
+            }
+            else
+            {
+                return Int();
+            }
+        }
 
         [IterationSetup]
         public void IterationSetup()
         {
             if (useLargeData)
             {
-                largePersistence = new SqlitePersistence<LargeData>(PersistenceFilename);
+                largePersistence = new NosqlPersistence<LargeData>(PersistenceFilePath);
                 PersistedQueueConfiguration config = new PersistedQueueConfiguration { MaxItemsInMemory = itemsToKeepInMemory };
                 largeQueue = new PersistedQueue<LargeData>(largePersistence, config);
             }
             else
             {
-                smallPersistence = new SqlitePersistence<int>(PersistenceFilename);
+                smallPersistence = new NosqlPersistence<int>(PersistenceFilePath);
                 PersistedQueueConfiguration config = new PersistedQueueConfiguration { MaxItemsInMemory = itemsToKeepInMemory };
                 smallQueue = new PersistedQueue<int>(smallPersistence, config);
             }
@@ -58,19 +71,6 @@ namespace PersistedQueueBenchmarks
             }
         }
 
-        [Benchmark]
-        public Task PersistentQueueSqliteFilePersistence()
-        {
-            if (useLargeData)
-            {
-                return LargeData();
-            }
-            else
-            {
-                return Int();
-            }
-        }
-
         private async Task Int()
         {
             for (int i = 0; i < totalItems; i++)
@@ -85,6 +85,7 @@ namespace PersistedQueueBenchmarks
 
         private async Task LargeData()
         {
+
             for (int i = 0; i < totalItems; i++)
             {
                 largeQueue.Enqueue(new LargeData());
