@@ -10,7 +10,6 @@ namespace PersistedQueue.Sqlite
         private static FromSpan<byte, byte[]> fromSpan =
             new FromSpan<byte, byte[]>((in ReadOnlySpan<byte> value) => value.ToArray());
         private static readonly ResultConverter<DatabaseItem> resultConverter = ResultConverter.Builder<DatabaseItem>()
-            .With(dbItem => dbItem.SerializedItem, fromSpan)
             .Compile();
         private static readonly ParameterConverter<uint> parameterConverter =
             ParameterConverter.ScalarBuilder<uint>(true)

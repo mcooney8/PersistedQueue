@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using DBreeze;
 using DBreeze.Transactions;
 using DBreeze.Utils;
-using MessagePack;
+using Newtonsoft.Json;
 using PersistedQueue.Persistence;
 
 namespace PersistedQueue.Nosql
@@ -28,9 +27,8 @@ namespace PersistedQueue.Nosql
                 DBreezeDataFolderName = path
             };
             db = new DBreezeEngine(configuration);
-            CustomSerializator.ByteArraySerializator = MessagePackSerializer.Serialize;
-            CustomSerializator.ByteArrayDeSerializator =
-                (byte[] serialized, Type t) => MessagePackSerializer.Deserialize<T>(serialized);
+            CustomSerializator.Serializator = JsonConvert.SerializeObject;
+            CustomSerializator.Deserializator = JsonConvert.DeserializeObject;
             transaction = db.GetTransaction();
         }
 

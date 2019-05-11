@@ -23,13 +23,15 @@ namespace PersistedQueueBenchmarks
             //BenchmarkRunner.Run<InMemoryPersistedQueueBenchmarks>();
         }
 
-        private static Task Debug()
+        private static async Task Debug()
         {
-            var benchmark = new InMemoryPersistedQueueBenchmarks();
+            var benchmark = new SqlitePersistedQueueBenchmarks();
             benchmark.useLargeData = false;
-            benchmark.totalItems = 1000;
-            benchmark.itemsToKeepInMemory = 1000;
-            return benchmark.PersistentQueueInMemoryPersistence();
+            benchmark.totalItems = 10000;
+            benchmark.itemsToKeepInMemory = 1;
+            benchmark.IterationSetup();
+            await benchmark.PersistentQueueSqliteFilePersistence();
+            benchmark.IterationCleanup();
         }
     }
 }

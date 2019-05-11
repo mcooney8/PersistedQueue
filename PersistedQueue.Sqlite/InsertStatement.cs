@@ -7,7 +7,6 @@ namespace PersistedQueue.Sqlite
     {
         private static readonly ParameterConverter<DatabaseItem> TypeMap =
             ParameterConverter.Builder<DatabaseItem>()
-            .With(dbItem => dbItem.SerializedItem, (byte[] a) => a.AsSpan())
             .Compile();
 
         private readonly Statement<DatabaseItem> statement;

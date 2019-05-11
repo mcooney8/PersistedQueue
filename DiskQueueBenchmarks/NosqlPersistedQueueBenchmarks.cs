@@ -12,13 +12,13 @@ namespace PersistedQueueBenchmarks
     {
         private const string PersistenceFilePath = @"/Users/Michael/Test/Persistence";
 
-        [Params(10000)]
+        [Params(1000)]
         public int totalItems;
 
-        [Params(100, 10000)]
+        [Params(100)]
         public int itemsToKeepInMemory;
 
-        [Params(false)]
+        [Params(false, true)]
         public bool useLargeData;
 
         private IPersistence<int> smallPersistence;

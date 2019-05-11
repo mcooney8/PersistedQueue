@@ -9,15 +9,15 @@ namespace PersistedQueueBenchmarks
     [MemoryDiagnoser]
     public class SqlitePersistedQueueBenchmarks
     {
-        private const string PersistenceFilename = @"C:\Test\persistence.db";
+        private const string PersistenceFilename = @"/Users/Michael/Test/sqlite.db";
 
-        [Params(10000)]
+        [Params(1000)]
         public int totalItems;
 
-        [Params(100, 10000)]
+        [Params(100)]
         public int itemsToKeepInMemory;
 
-        [Params(false)]
+        [Params(false, true)]
         public bool useLargeData;
 
         private IPersistence<LargeData> largePersistence;
@@ -32,8 +32,12 @@ namespace PersistedQueueBenchmarks
             if (useLargeData)
             {
                 largePersistence = new SqlitePersistence<LargeData>(PersistenceFilename);
-                PersistedQueueConfiguration config = new PersistedQueueConfiguration { MaxItemsInMemory = itemsToKeepInMemory };
-                largeQueue = new PersistedQueue<LargeData>(largePersistence, config);
+                PersistedQueueConfiguration config = new PersistedQueueConfiguration
+                {
+                    MaxItemsInMemory = itemsToKeepInMemory,
+                    PersistAllItems = true
+                };
+                largeQueue = new PersistedQueue<LargeData>(largePersistence);
             }
             else
             {
