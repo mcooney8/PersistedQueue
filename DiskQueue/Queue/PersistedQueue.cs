@@ -8,7 +8,8 @@ using PersistedQueue.Persistence;
 namespace PersistedQueue
 {
     /// <summary>
-    /// Persisted queue.
+    /// Persisted queue is a queue implementation that also keeps either some or all 
+    /// items on disk. It is a thread-safe implementation.
     /// </summary>
     public class PersistedQueue<T> : IEnumerable<T>, IReadOnlyCollection<T>
     {
@@ -92,11 +93,10 @@ namespace PersistedQueue
             queueSemaphore.Wait();
             try
             {
-                if (Count == 0)
+                if (Count-- == 0)
                 {
                     throw new InvalidOperationException("Cannot dequeue from an empty queue");
                 }
-                Count--;
                 uint keyToRemove = firstKey++;
                 T item = await inMemoryItems.Dequeue();
                 if (persistenceFirstKey == keyToRemove)
@@ -139,11 +139,11 @@ namespace PersistedQueue
         {
             if (!isLoaded)
             {
+                isLoaded = true;
                 foreach (T loadedItem in persistence.Load())
                 {
                     Enqueue(loadedItem);
                 }
-                isLoaded = true;
             }
         }
 

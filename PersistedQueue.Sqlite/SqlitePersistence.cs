@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LogAnalyzer.PersistedQueue.Sqlite;
@@ -14,7 +13,7 @@ namespace PersistedQueue.Sqlite
     {
         private const string TableName = "PersistedItem";
 
-        private Connection connection;
+        private readonly Connection connection;
         private bool disposed;
 
         private static readonly string DropTableSql = $"drop table {TableName}";
@@ -86,14 +85,6 @@ namespace PersistedQueue.Sqlite
             var statements = statementPool.Rent();
             DatabaseItem dbItem = statements.SelectStatement.Execute(key);
             var result = Convert(dbItem);
-            statementPool.Return(statements);
-            return result;
-        }
-
-        public bool Contains(uint key)
-        {
-            var statements = statementPool.Rent();
-            bool result = statements.SelectStatement.Exists(key);
             statementPool.Return(statements);
             return result;
         }
