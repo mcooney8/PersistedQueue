@@ -16,13 +16,13 @@
     <PackageReference Include="BenchmarkDotNet" Version="0.11.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DiskQueue\PersistedQueue.csproj" />
-    <ProjectReference Include="..\PersistedQueue.Sqlite\PersistedQueue.Sqlite.csproj" />
-    <ProjectReference Include="..\PersistedQueue.Nosql\PersistedQueue.Nosql.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="app.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PersistedQueue\PersistedQueue.csproj" />
+    <ProjectReference Include="..\PersistedQueue.Nosql\PersistedQueue.Nosql.csproj" />
+    <ProjectReference Include="..\PersistedQueue.Sqlite\PersistedQueue.Sqlite.csproj" />
   </ItemGroup>
 </Project>

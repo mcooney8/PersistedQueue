@@ -25,7 +25,7 @@ namespace PersistedQueue
         {
             if (Count == capacity)
             {
-                throw new InvalidOperationException("Cannot push any more items, stack is full");
+                throw new InvalidOperationException("Cannot push any more items, queue is full");
             }
             if ((headIndex + Count) == items.Length)
             {
@@ -40,11 +40,10 @@ namespace PersistedQueue
         {
             if (Count == 0)
             {
-                throw new InvalidOperationException("Cannot pop an empty stack");
+                throw new InvalidOperationException("Cannot pop an empty queue");
             }
             var itemToDequeue = items[headIndex];
-            Count--;
-            if (Count == 0)
+            if (--Count == 0)
             {
                 ResetArray();
             }
